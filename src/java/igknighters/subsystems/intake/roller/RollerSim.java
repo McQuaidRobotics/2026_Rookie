@@ -20,7 +20,7 @@ public class RollerSim extends Roller {
      */
     @Override
     public double getPosition(){
-        currentDistance += currentDistance * 0.2;
+        currentDistance += currentSpeed * 0.2;
         return currentDistance;
     }
 
