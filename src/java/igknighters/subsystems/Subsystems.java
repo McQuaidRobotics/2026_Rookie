@@ -3,6 +3,7 @@ package igknighters.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
+import igknighters.subsystems.SPINNY.Spinny;
 import igknighters.subsystems.led.Led;
 import igknighters.subsystems.swerve.Swerve;
 import igknighters.subsystems.turret.TurretNoAbstract;
@@ -24,6 +25,8 @@ public class Subsystems {
     /** The Luma subsystem for object detection. */
     public final Luma luma;
 
+    public final Spinny spinny;
+
     public final TurretNoAbstract turret;
 
     /**
@@ -41,12 +44,18 @@ public class Subsystems {
      * @param luma The Luma subsystem.
      */
     public Subsystems(
-            Swerve swerve, LimeLightVision vision, Led led, Luma luma, TurretNoAbstract turret) {
+            Swerve swerve,
+            LimeLightVision vision,
+            Led led,
+            Luma luma,
+            Spinny spinny,
+            TurretNoAbstract turret) {
         this.swerve = swerve;
         this.vision = vision;
         this.led = led;
         this.luma = luma;
-        this.lockedResources = new SubsystemBase[] {swerve, vision, led, luma};
+        this.spinny = spinny;
         this.turret = turret;
+        this.lockedResources = new SubsystemBase[] {swerve, vision, led, luma, spinny, turret};
     }
 }

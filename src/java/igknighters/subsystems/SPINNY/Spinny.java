@@ -1,7 +1,8 @@
-package igknighters.commands.SPINNY;
+package igknighters.subsystems.SPINNY;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Pounds;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -44,7 +45,7 @@ public class Spinny extends SubsystemBase {
                     .withStatorCurrentLimit(Amps.of(40));
 
     // Vendor motor controller object
-    private TalonFX talon = new TalonFX(15); // anything other then 1-12
+    private TalonFX talon = new TalonFX(14); // anything other then 1-12 15 or 16
 
     // Create our SmartMotorController from our TalonFX and config.
     private SmartMotorController smc =
@@ -55,6 +56,7 @@ public class Spinny extends SubsystemBase {
                     // Diameter of the flywheel.
                     .withDiameter(Inches.of(4))
                     .withSmartMotorController(smc)
+                    .withMass(Pounds.of(1))
                     // Telemetry name and verbosity for the arm.
                     .withTelemetry("ShooterMech", TelemetryVerbosity.HIGH);
 
