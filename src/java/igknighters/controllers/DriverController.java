@@ -134,6 +134,8 @@ public class DriverController {
         // Example: this.A.whileTrue(new MyCommand(subsystems.mySubsystem));
         // Swerve driving is handled by the default command set in Robot.java,
         // so no explicit bind is needed here for basic teleop driving.
+        this.A.whileTrue(subsystems.motor.targetSpeed(3000));
+        this.B.whileTrue(subsystems.motor.targetSpeed(0));
     }
 
     /**

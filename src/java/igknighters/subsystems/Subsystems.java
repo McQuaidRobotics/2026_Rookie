@@ -1,6 +1,7 @@
 package igknighters.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import igknighters.subsystems.Fly_Wheel.hardware.BingusMotor;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
 import igknighters.subsystems.led.Led;
@@ -20,6 +21,8 @@ public class Subsystems {
     /** The LED subsystem for visual feedback. */
     public final Led led;
 
+    public final BingusMotor motor;
+
     /** The Luma subsystem for object detection. */
     public final Luma luma;
 
@@ -37,11 +40,13 @@ public class Subsystems {
      * @param led The LED subsystem.
      * @param luma The Luma subsystem.
      */
-    public Subsystems(Swerve swerve, LimeLightVision vision, Led led, Luma luma) {
+    public Subsystems(
+            Swerve swerve, LimeLightVision vision, Led led, Luma luma, BingusMotor motor) {
         this.swerve = swerve;
         this.vision = vision;
         this.led = led;
         this.luma = luma;
-        this.lockedResources = new SubsystemBase[] {swerve, vision, led, luma};
+        this.motor = motor;
+        this.lockedResources = new SubsystemBase[] {swerve, vision, led, luma, motor};
     }
 }
