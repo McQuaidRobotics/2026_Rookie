@@ -28,9 +28,11 @@ import igknighters.constants.DrivingSharedState;
 import igknighters.constants.FieldConstants;
 import igknighters.constants.SubsystemConstants;
 import igknighters.controllers.DriverController;
+import igknighters.controllers.DriverController.DebugType;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
 import igknighters.subsystems.Subsystems;
+import igknighters.subsystems.indexer.Indexer;
 import igknighters.subsystems.led.Led;
 import igknighters.subsystems.swerve.Swerve;
 import igknighters.util.FuelSim;
@@ -234,10 +236,11 @@ public class Robot extends LoggedRobot {
         setUpCommandLogging();
         subsystems =
                 new Subsystems(
-                        new Swerve(false),
+                        new Swerve(true),
                         new LimeLightVision(),
                         new Led(90, 2),
-                        new Luma(true, "object-detection"));
+                        new Luma(true, "object-detection"),
+                        new Indexer());
         setUpSwerve(subsystems);
         publishCommandsAndSubystems(subsystems);
         setUpAutos(subsystems);
@@ -266,7 +269,8 @@ public class Robot extends LoggedRobot {
                         new Swerve(isSwerveDisabled),
                         new LimeLightVision(),
                         new Led(90, 2),
-                        new Luma(true, "object-detection"));
+                        new Luma(true, "object-detection"),
+                        new Indexer());
         setUpSwerve(subsystems);
         pose_pred = new RobotPosePredictor(subsystems.swerve);
         publishCommandsAndSubystems(subsystems);
@@ -403,7 +407,8 @@ public class Robot extends LoggedRobot {
 
     /** Binds commands to the driver controller. */
     public void bindDriverController() {
-        driverController.bind(subsystems);
+        System.out.println("controller is bound");
+        driverController.bind(subsystems, DebugType.INDEXER);
     }
 
     @Override
