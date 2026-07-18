@@ -7,14 +7,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import igknighters.subsystems.indexer.Indexer;
 
 public class SpindexerCommands {
-    public static Command SummondSpindexeroidTitano(
+    public static Command SummonSpindexeroidTitano(
             Indexer indexer, AngularVelocity exitRollerSpeed, AngularVelocity spindexerSpeed) {
-        return indexer.run(
-                () -> {
-                    System.out.println("this is running");
-                    indexer.runExitRoller(exitRollerSpeed);
-                    indexer.runSpindexer(spindexerSpeed);
-                });
+        return indexer.exitRoller
+                .run(exitRollerSpeed)
+                .alongWith(indexer.spindexer.run(spindexerSpeed));
     }
 
     public static Command SHUTUP(Indexer spindexer) {

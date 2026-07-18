@@ -5,12 +5,16 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
 
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import igknighters.constants.SubsystemConstants;
 import igknighters.constants.SubsystemConstants.kIndexer.kSpindexer;
 import igknighters.util.log.Log;
 import yams.gearing.MechanismGearing;
@@ -24,6 +28,11 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
 public class Spindexer extends SubsystemBase {
+
+    private CANcoder spindexerEncoder =
+            new CANcoder(
+                    SubsystemConstants.kShooter.kTurret.CANCODER_ID,
+                    new CANBus("SuperStructureBus"));
     private SmartMotorControllerConfig smcConfig =
             new SmartMotorControllerConfig(this)
                     .withControlMode(ControlMode.CLOSED_LOOP)
@@ -35,7 +44,9 @@ public class Spindexer extends SubsystemBase {
                     .withGearing(new MechanismGearing(1))
                     .withMotorInverted(false)
                     .withIdleMode(MotorMode.COAST)
-                    .withStatorCurrentLimit(Amps.of(40));
+                    .withStatorCurrentLimit(Amps.of(40))
+                    .withExternalEncoder(spindexerEncoder)
+                    .withExternalEncoderInverted(false);
 
     private TalonFX kraken = new TalonFX(kSpindexer.LEADER_MOTOR_ID);
 
@@ -55,13 +66,13 @@ public class Spindexer extends SubsystemBase {
         return spinner.getSpeed();
     }
 
-    public void setVoltage(Voltage voltage) {
-        spinner.setVoltage(voltage);
+    public Command setVoltage(Voltage voltage) {
+        return spinner.setVoltage(voltage);
     }
 
-    public void run(AngularVelocity speed) {
+    public Command run(AngularVelocity speed) {
         Log.log("ROBOT/Commands/Indexer/Spindexer/RUNNING_AT:", speed.in(RPM));
-        spinner.run(speed);
+        return spinner.run(speed);
     }
 
     @Override

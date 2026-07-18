@@ -4,11 +4,14 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Pounds;
 
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.constants.SubsystemConstants.kIndexer.kExitRollers;
 import yams.gearing.MechanismGearing;
@@ -22,6 +25,8 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
 public class ExitRoller extends SubsystemBase {
+    private CANcoder exitRollerEncoder = new CANcoder(17, new CANBus("SuperStructureBus"));
+
     private SmartMotorControllerConfig smcConfig =
             new SmartMotorControllerConfig(this)
                     .withControlMode(ControlMode.CLOSED_LOOP)
@@ -33,7 +38,9 @@ public class ExitRoller extends SubsystemBase {
                     .withGearing(new MechanismGearing(1))
                     .withMotorInverted(false)
                     .withIdleMode(MotorMode.COAST)
-                    .withStatorCurrentLimit(Amps.of(40));
+                    .withStatorCurrentLimit(Amps.of(40))
+                    .withExternalEncoder(exitRollerEncoder)
+                    .withExternalEncoderInverted(false);
 
     private TalonFX kraken = new TalonFX(kExitRollers.LEADER_MOTOR_ID);
 
@@ -53,21 +60,22 @@ public class ExitRoller extends SubsystemBase {
         return exitRoller.getSpeed();
     }
 
-    public void setVoltage(Voltage voltage) {
-        exitRoller.setVoltage(voltage);
+    public Command setVoltage(Voltage voltage) {
+        return exitRoller.setVoltage(voltage);
     }
 
-    public void run(AngularVelocity speed) {
-        exitRoller.run(speed);
+    public Command run(AngularVelocity speed) {
+        System.out.println("Exit Roller Motor is running");
+        return exitRoller.run(speed);
     }
 
     @Override
-    public void periodic() { // called in Spindexer.java
+    public void periodic() {
         exitRoller.updateTelemetry();
     }
 
     @Override
-    public void simulationPeriodic() { // called in Spindexer.java
+    public void simulationPeriodic() {
         exitRoller.simIterate();
     }
 }

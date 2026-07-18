@@ -25,7 +25,7 @@ public class Subsystems {
     /** The Luma subsystem for object detection. */
     public final Luma luma;
 
-    public final Indexer spindexer;
+    public final Indexer indexer;
 
     /**
      * Array of subsystems that require exclusive access (Locked resources). Used for publishing
@@ -41,15 +41,14 @@ public class Subsystems {
      * @param led The LED subsystem.
      * @param luma The Luma subsystem.
      */
-    public Subsystems(
-            Swerve swerve, LimeLightVision vision, Led led, Luma luma, Indexer spindexer) {
+    public Subsystems(Swerve swerve, LimeLightVision vision, Led led, Luma luma, Indexer indexer) {
         this.swerve = swerve;
         this.vision = vision;
         this.led = led;
         this.luma = luma;
-        this.spindexer = spindexer;
+        this.indexer = indexer;
         this.lockedResources = new SubsystemBase[] {swerve, vision, led, luma};
 
-        this.spindexer.setDefaultCommand(SpindexerCommands.SHUTUP(this.spindexer));
+        this.indexer.setDefaultCommand(SpindexerCommands.SHUTUP(this.indexer));
     }
 }
