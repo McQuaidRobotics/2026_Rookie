@@ -70,7 +70,7 @@ public class Spindexer extends SubsystemBase {
         return spinner.setVoltage(voltage);
     }
 
-    public Command run(AngularVelocity speed) {
+    public Command spin(AngularVelocity speed) {
         Log.log("ROBOT/Commands/Indexer/Spindexer/RUNNING_AT:", speed.in(RPM));
         return spinner.run(speed);
     }
