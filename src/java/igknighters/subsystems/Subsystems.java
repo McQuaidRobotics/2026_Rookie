@@ -1,7 +1,7 @@
 package igknighters.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import igknighters.commands.SpindexerCommands;
+import igknighters.commands.IndexerCommands;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
 import igknighters.subsystems.indexer.Indexer;
@@ -49,6 +49,6 @@ public class Subsystems {
         this.indexer = indexer;
         this.lockedResources = new SubsystemBase[] {swerve, vision, led, luma};
 
-        this.indexer.setDefaultCommand(SpindexerCommands.SHUTUP(this.indexer));
+        this.indexer.setDefaultCommand(IndexerCommands.SHUTUP(indexer));
     }
 }
