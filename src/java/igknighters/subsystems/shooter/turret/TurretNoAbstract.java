@@ -35,44 +35,25 @@ public class TurretNoAbstract extends SubsystemBase {
             new CANcoder(
                     SubsystemConstants.kShooter.kTurret.CANCODER_ID,
                     SubsystemConstants.superStructure);
-    // --------------------------------------------------------------------------------------------------
-    // HERE IS WHAT I DID KYLE
-    // YAMS IS THE GOAT OF THE ENTIRE WORLD
-    // BECAUSE YAMS IS THE BEST THING SINCE SLICED BREAD, BRISKET, AND RAMEN IT CARES ABOUT CANIDS
-    // 1-12 is reserved by swerve so when we had 4 and 5 we were double booking the same gear
-    // eg the turret encoder reading from swerve and swerve reading from turret motor
-    // regardless it was not tech in the slightest
-    // so simply changing the id to 15 and 16 fixed this issue
-    // This is why having a constant file is so usefull
-    // IM GOING TO F UP THE SUBSYSTEM CONSTANTS ID FILE SO THAT WE DONT HAVE TO WORRY ABOUT THIS IN
-    // THE FUTURE
-    // PLEASE NOTE THAT ALL THE IDS WILL HAVE TO BE RE SET WITH TUNER X
-    // THIS IS FOR THE BEST THOUGH BECAUSE IT WILL BE MORE ORGANIZED AND EASIER TO READ
-    // ALSO THE OFFSET NEEDS TO BE SET!! OR ELSE IT WILL BE WRONG ABOUT WHERE 0 IS
-    // ---------------------------------------------------------------------------------------------------
 
     private SmartMotorControllerConfig smcConfig =
             new SmartMotorControllerConfig(this)
                     .withControlMode(ControlMode.CLOSED_LOOP)
                     // Feedback Constants (PID Constants)
                     .withClosedLoopController(kTurret.kP, kTurret.kI, kTurret.kD)
-                    .withSimClosedLoopController(5, 0, 0)
+                    .withSimClosedLoopController(kTurret.kP, kTurret.kI, kTurret.kD)
                     .withTrapezoidalProfile(
-                            RotationsPerSecond.of(3), RotationsPerSecondPerSecond.of(4.5))
+                            RotationsPerSecond.of(kTurret.MAX_SPEED_RPM), RotationsPerSecondPerSecond.of(kTurret.MAX_ACCELERATION_RPM))
                     // ----------------------------------------------------------------
-                    .withSoftLimits(Degrees.of(-270), Degrees.of(90))
+                    .withSoftLimits(Degrees.of(kTurret.MIN_ANGLE_DEGREES), Degrees.of(kTurret.MAX_ANGLE_DEGREES))
                     // ----------------------------------------------------------------
                     .withSimClosedLoopController(50, 0, 0)
                     // Feedforward Constants
-                    .withFeedforward(new ArmFeedforward(0, 0, 0))
-                    .withSimFeedforward(new ArmFeedforward(0, 0, 0))
+                    .withFeedforward(new ArmFeedforward(kTurret.kS, 0, kTurret.kV))
+                    .withSimFeedforward(new ArmFeedforward(kTurret.kS, 0, kTurret.kV)) // kg is not nesessary because the turret is horizontal and does not have to fight gravity
                     // Telemetry name and verbosity level
                     .withTelemetry("TurretMotor", TelemetryVerbosity.HIGH)
-                    // Gearing from the motor rotor to final shaft.
-                    // In this example GearBox.fromReductionStages(3,4) is the same as
-                    // GearBox.fromStages("3:1","4:1") which corresponds to the gearbox attached to
-                    // your motor.
-                    // You could also use .withGearing(12) which does the same thing.
+
                     .withGearing(16.2)
                     // Motor properties to prevent over currenting.
                     .withMotorInverted(false)
@@ -80,11 +61,11 @@ public class TurretNoAbstract extends SubsystemBase {
                     .withStatorCurrentLimit(Amps.of(40))
                     .withClosedLoopRampRate(Seconds.of(0.25))
                     .withOpenLoopRampRate(Seconds.of(0.25))
-                    .withSoftLimits(Degrees.of(-270), Degrees.of(90))
+                    .withSoftLimits(Degrees.of(kTurret.MIN_ANGLE_DEGREES), Degrees.of(kTurret.MAX_ANGLE_DEGREES))
                     .withMomentOfInertia(Meters.of(.1), Pounds.of(.15))
                     .withClosedLoopRampRate(Seconds.of(0.25))
-                    .withOpenLoopRampRate(Seconds.of(0.25))
-                    .withExternalEncoder(turretEncoder)
+                    .withOpenLoopRampRate(Seconds.of(0.25)) //  numbers that we have seen work in the season
+                    .withExternalEncoder(turretEncoder) 
                     .withExternalEncoderInverted(false)
                     .withExternalEncoderGearing(
                             new MechanismGearing(GearBox.fromReductionStages(1)))
