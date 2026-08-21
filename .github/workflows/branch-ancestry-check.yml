@@ -1,0 +1,29 @@
+# Changeset rule #4 — report whether the PR branch is based on current main.
+# This is ADVISORY: the "require branches to be up to date before merging" ruleset
+# (strict required status checks, changeset #2) is what actually blocks a stale branch
+# at merge time. True branch-creation-time blocking is not possible with Actions, so
+# this surfaces the gap early as a warning rather than a hard failure.
+name: Branch Ancestry Check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  ancestry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need full history to compute merge-base
+
+      - name: Report distance from main
+        run: |
+          git fetch --no-tags origin main
+          if git merge-base --is-ancestor origin/main HEAD; then
+            echo "OK: branch contains current main (up to date)."
+          else
+            base=$(git merge-base origin/main HEAD)
+            behind=$(git rev-list --count "$base"..origin/main)
+            echo "::warning::Branch is $behind commit(s) behind main (merge-base ${base:0:12}). Merge or rebase main before requesting merge."
+          fi

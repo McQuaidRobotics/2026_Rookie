@@ -1,0 +1,25 @@
+# Changeset rule #5 — enforce issue-number-prefixed branch names on PRs to main.
+# Branch creation itself cannot be blocked by Actions (the branch already exists when
+# the workflow runs), so this gates at PR time. Add it as a required status check to
+# make it blocking.
+name: Branch Naming Policy
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  naming:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require issue-number prefix
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          echo "PR head branch: $HEAD_REF"
+          if [[ ! "$HEAD_REF" =~ ^[0-9]+- ]]; then
+            echo "::error::Branch '$HEAD_REF' must start with an issue number, e.g. '123-short-description'."
+            echo "Create the branch from the issue (Issue → Development → Create a branch) to get a compliant name."
+            exit 1
+          fi
+          echo "OK: issue-number prefix present."
