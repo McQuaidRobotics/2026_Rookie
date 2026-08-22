@@ -4,10 +4,12 @@ import static edu.wpi.first.units.Units.Degrees;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.constants.SubsystemConstants.kShooter.kHood;
+import igknighters.commands.shooter.ShooterCommands;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
 import igknighters.subsystems.led.Led;
 import igknighters.subsystems.shooter.Shooter;
+import igknighters.subsystems.shooter.turret.TurretNoAbstract;
 import igknighters.subsystems.swerve.Swerve;
 
 /**
@@ -26,6 +28,8 @@ public class Subsystems {
 
     /** The Luma subsystem for object detection. */
     public final Luma luma;
+
+    public final TurretNoAbstract turret;
 
     public final Shooter shooter;
 
