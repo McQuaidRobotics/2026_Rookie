@@ -54,9 +54,7 @@ public class Hood extends SubsystemBase {
                     // Feedforward Constants
                     .withFeedforward(new ArmFeedforward(0, 0, 0))
                     .withSimFeedforward(new ArmFeedforward(0, 0, 0))
-     
                     .withTelemetry("TurretMotor", TelemetryVerbosity.HIGH)
-                
                     .withGearing(360 / 15)
                     .withMotorInverted(false)
                     .withIdleMode(MotorMode.BRAKE)
@@ -70,7 +68,7 @@ public class Hood extends SubsystemBase {
                     .withClosedLoopRampRate(Seconds.of(0.25))
                     .withOpenLoopRampRate(Seconds.of(0.25));
 
-    private DigitalInput dio = new DigitalInput(kHood.REVERSE_LIMIT_SWITCH_ID); 
+    private DigitalInput dio = new DigitalInput(kHood.REVERSE_LIMIT_SWITCH_ID);
 
     private TalonFX talon = new TalonFX(kHood.MOTOR_ID, SubsystemConstants.superStructure);
 
@@ -79,8 +77,7 @@ public class Hood extends SubsystemBase {
 
     MechanismPositionConfig hoodPosConfig =
             new MechanismPositionConfig()
-                    .withRelativePosition(
-                            new Translation3d(0.2, 0.0, 0.3)) 
+                    .withRelativePosition(new Translation3d(0.2, 0.0, 0.3))
                     .withMaxRobotLength(Meters.of(0.85))
                     .withMaxRobotHeight(Meters.of(1.20))
                     .withMovementPlane(MechanismPositionConfig.Plane.XZ);
@@ -101,16 +98,15 @@ public class Hood extends SubsystemBase {
 
     private final Sensor hoodLimit =
             new SensorConfig("hoodLimit") // Name of the sensor
-                    .withField(
-                            "Limit", dio::get,
-                            false) // Add a Field to the sensor named "Limit" 
+                    .withField("Limit", dio::get, false) // Add a Field to the sensor named "Limit"
                     .withSimulatedValue(
                             "Limit",
                             hood.isNear(Degrees.of(kHood.MIN_ANGLE_DEGREES), Degrees.of(2)),
-                            true) 
+                            true)
                     .getSensor(); // Get the sensor.
 
-                    // This is a simulated and real sensor that will return true when the hood is near the minimum angle.
+    // This is a simulated and real sensor that will return true when the hood is near the minimum
+    // angle.
 
     public boolean getHoodLimit() {
         Log.log("ROBOT/SUBSYSTEMS/SHOOTER/HOOD/LIMIT_HIT", hoodLimit.getAsBoolean("Limit"));
