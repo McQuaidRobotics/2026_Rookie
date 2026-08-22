@@ -29,7 +29,6 @@ public class Subsystems {
     /** The Luma subsystem for object detection. */
     public final Luma luma;
 
-    public final TurretNoAbstract turret;
 
     public final Shooter shooter;
 
@@ -46,7 +45,7 @@ public class Subsystems {
      * @param vision The vision subsystem.
      * @param led The LED subsystem.
      * @param luma The Luma subsystem.
-     * @param hood The Hood subsystem.
+     * @param shooter The shooter subsystem.
      */
     public Subsystems(Swerve swerve, LimeLightVision vision, Led led, Luma luma, Shooter shooter) {
         this.swerve = swerve;
@@ -55,7 +54,7 @@ public class Subsystems {
         this.led = led;
         this.luma = luma;
         this.lockedResources =
-                new SubsystemBase[] {swerve, vision, led, luma, shooter, shooter.hood};
+                new SubsystemBase[] {swerve, vision, led, luma, shooter, shooter.hood, shooter.turret};
         this.shooter.hood.setDefaultCommand(
                 shooter.hood.targetAngleCommand(Degrees.of(kHood.MIN_ANGLE_DEGREES)));
     }

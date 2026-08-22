@@ -13,10 +13,5 @@ public class ShooterState {
         this.turretAngle = turretAngle;
         this.flywheelVelocity = flywheelVelocity;
 
-public class ShooterState {
-    public Angle turretAngle;
-
-    public ShooterState(Angle turretAngle) {
-        this.turretAngle = turretAngle;
     }
 }

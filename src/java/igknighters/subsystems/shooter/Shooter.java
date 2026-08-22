@@ -2,10 +2,12 @@ package igknighters.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import igknighters.subsystems.shooter.turret.TurretNoAbstract;
 
 public class Shooter extends SubsystemBase {
     // shooter will hold all of the underlying mechanisms and it will be what is interfaced with
     public Hood hood = new Hood();
+    public TurretNoAbstract turret = new TurretNoAbstract();
 
     // put the flywheels and the turret here
     /**
@@ -29,12 +31,5 @@ public class Shooter extends SubsystemBase {
 
     public boolean isHoodSensorHit() {
         return hood.getHoodLimit();
-import igknighters.subsystems.shooter.turret.TurretNoAbstract;
-
-public class Shooter {
-    public TurretNoAbstract turret = new TurretNoAbstract();
-
-    public void targetState(ShooterState state) {
-        turret.targetAngle(state.turretAngle);
     }
 }

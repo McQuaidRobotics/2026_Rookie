@@ -82,12 +82,12 @@ public class TurretNoAbstract extends SubsystemBase {
             new TalonFXWrapper(talon, DCMotor.getFalcon500(1), smcConfig);
 
     private final PivotConfig shooterConfig =
-            new PivotConfig(talonSmartMotorController)
+            new PivotConfig()
                     // Soft limit is applied to the SmartMotorControllers PID
 
                     .withHardLimits(Degrees.of(-280), Degrees.of(100))
                     .withTelemetry("SHOOTER_TURRET", TelemetryVerbosity.HIGH);
-    private Pivot shooter = new Pivot(shooterConfig);
+    private Pivot shooter = new Pivot(shooterConfig, talonSmartMotorController);
 
         public static Angle wrapAngle(Angle angle) {
         double ogDegrees = angle.in(Degrees);
