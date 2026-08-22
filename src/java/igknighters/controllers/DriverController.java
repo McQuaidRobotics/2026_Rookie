@@ -1,5 +1,7 @@
 package igknighters.controllers;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -131,6 +133,10 @@ public class DriverController {
      * @param subsystems The robot subsystems available for command targeting.
      */
     public void bind(final Subsystems subsystems) {
+        this.A.whileTrue(subsystems.turret.targetAngleCommand(Degrees.of(-180)));
+        this.B.whileTrue(subsystems.turret.targetAngleCommand(Degrees.of(-90)));
+        this.X.whileTrue(subsystems.turret.targetAngleCommand(Degrees.of(90)));
+        this.Y.whileTrue(subsystems.turret.targetAngleCommand(Degrees.of(0)));
         // Example: this.A.whileTrue(new MyCommand(subsystems.mySubsystem));
         // Swerve driving is handled by the default command set in Robot.java,
         // so no explicit bind is needed here for basic teleop driving.
