@@ -43,17 +43,24 @@ public class TurretNoAbstract extends SubsystemBase {
                     .withClosedLoopController(kTurret.kP, kTurret.kI, kTurret.kD)
                     .withSimClosedLoopController(kTurret.kP, kTurret.kI, kTurret.kD)
                     .withTrapezoidalProfile(
-                            RotationsPerSecond.of(kTurret.MAX_SPEED_RPM), RotationsPerSecondPerSecond.of(kTurret.MAX_ACCELERATION_RPM))
+                            RotationsPerSecond.of(kTurret.MAX_SPEED_RPM),
+                            RotationsPerSecondPerSecond.of(kTurret.MAX_ACCELERATION_RPM))
                     // ----------------------------------------------------------------
-                    .withSoftLimits(Degrees.of(kTurret.MIN_ANGLE_DEGREES), Degrees.of(kTurret.MAX_ANGLE_DEGREES))
+                    .withSoftLimits(
+                            Degrees.of(kTurret.MIN_ANGLE_DEGREES),
+                            Degrees.of(kTurret.MAX_ANGLE_DEGREES))
                     // ----------------------------------------------------------------
-                    .withSimClosedLoopController(50, 0, 0)
+                    .withSimClosedLoopController(5, 0, 0)
                     // Feedforward Constants
                     .withFeedforward(new ArmFeedforward(kTurret.kS, 0, kTurret.kV))
-                    .withSimFeedforward(new ArmFeedforward(kTurret.kS, 0, kTurret.kV)) // kg is not nesessary because the turret is horizontal and does not have to fight gravity
+                    .withSimFeedforward(
+                            new ArmFeedforward(
+                                    kTurret.kS,
+                                    0,
+                                    kTurret.kV)) // kg is not nesessary because the turret is
+                    // horizontal and does not have to fight gravity
                     // Telemetry name and verbosity level
                     .withTelemetry("TurretMotor", TelemetryVerbosity.HIGH)
-
                     .withGearing(16.2)
                     // Motor properties to prevent over currenting.
                     .withMotorInverted(false)
@@ -61,11 +68,14 @@ public class TurretNoAbstract extends SubsystemBase {
                     .withStatorCurrentLimit(Amps.of(40))
                     .withClosedLoopRampRate(Seconds.of(0.25))
                     .withOpenLoopRampRate(Seconds.of(0.25))
-                    .withSoftLimits(Degrees.of(kTurret.MIN_ANGLE_DEGREES), Degrees.of(kTurret.MAX_ANGLE_DEGREES))
+                    .withSoftLimits(
+                            Degrees.of(kTurret.MIN_ANGLE_DEGREES),
+                            Degrees.of(kTurret.MAX_ANGLE_DEGREES))
                     .withMomentOfInertia(Meters.of(.1), Pounds.of(.15))
                     .withClosedLoopRampRate(Seconds.of(0.25))
-                    .withOpenLoopRampRate(Seconds.of(0.25)) //  numbers that we have seen work in the season
-                    .withExternalEncoder(turretEncoder) 
+                    .withOpenLoopRampRate(
+                            Seconds.of(0.25)) //  numbers that we have seen work in the season
+                    .withExternalEncoder(turretEncoder)
                     .withExternalEncoderInverted(false)
                     .withExternalEncoderGearing(
                             new MechanismGearing(GearBox.fromReductionStages(1)))
@@ -89,7 +99,7 @@ public class TurretNoAbstract extends SubsystemBase {
                     .withTelemetry("SHOOTER_TURRET", TelemetryVerbosity.HIGH);
     private Pivot shooter = new Pivot(shooterConfig, talonSmartMotorController);
 
-        public static Angle wrapAngle(Angle angle) {
+    public static Angle wrapAngle(Angle angle) {
         double ogDegrees = angle.in(Degrees);
         double maxDegrees = SubsystemConstants.kShooter.kTurret.MAX_ANGLE_DEGREES;
         double MIN_ANGLE_DEGREES = SubsystemConstants.kShooter.kTurret.MIN_ANGLE_DEGREES;
@@ -111,7 +121,7 @@ public class TurretNoAbstract extends SubsystemBase {
     }
 
     public Command targetAngleCommand(Angle angle) {
-        return shooter.run(angle);
+        return shooter.run(wrapAngle(angle));
     }
 
     public Command targetAngleAndEndWhenReached(Angle angle) {

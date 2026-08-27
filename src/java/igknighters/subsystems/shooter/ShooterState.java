@@ -12,6 +12,5 @@ public class ShooterState {
         this.hoodAngle = hoodAngle;
         this.turretAngle = turretAngle;
         this.flywheelVelocity = flywheelVelocity;
-
     }
 }

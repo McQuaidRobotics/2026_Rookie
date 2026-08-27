@@ -54,8 +54,8 @@ public class Hood extends SubsystemBase {
                     // Feedforward Constants
                     .withFeedforward(new ArmFeedforward(0, 0, 0))
                     .withSimFeedforward(new ArmFeedforward(0, 0, 0))
-                    .withTelemetry("TurretMotor", TelemetryVerbosity.HIGH)
-                    .withGearing(360 / 15)
+                    .withTelemetry("HoodMotor", TelemetryVerbosity.HIGH)
+                    .withGearing(360 / kHood.MOTOR_ROTS_TO_HOOD_DEGREES)
                     .withMotorInverted(false)
                     .withIdleMode(MotorMode.BRAKE)
                     .withStatorCurrentLimit(Amps.of(40))

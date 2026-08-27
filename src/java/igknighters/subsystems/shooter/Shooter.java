@@ -1,6 +1,7 @@
 package igknighters.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.subsystems.shooter.turret.TurretNoAbstract;
 
@@ -17,6 +18,7 @@ public class Shooter extends SubsystemBase {
      */
     public void targetState(ShooterState state) {
         hood.targetAngleNoCommand(state.hoodAngle);
+        turret.targetAngle(state.turretAngle);
     }
 
     /**
@@ -26,7 +28,9 @@ public class Shooter extends SubsystemBase {
      * @return
      */
     public Command targetStateCommand(ShooterState state) {
-        return hood.targetAngleCommand(state.hoodAngle);
+        return Commands.parallel(
+                hood.targetAngleCommand(state.hoodAngle),
+                turret.targetAngleCommand(state.turretAngle));
     }
 
     public boolean isHoodSensorHit() {
