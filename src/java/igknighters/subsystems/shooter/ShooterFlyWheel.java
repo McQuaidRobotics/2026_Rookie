@@ -37,7 +37,7 @@ public class ShooterFlyWheel extends SubsystemBase {
                     // Feedforward Constants
                     .withTelemetry("SHOOTER_FLYWHEEL_LEADER_MOTOR", TelemetryVerbosity.HIGH)
                     .withGearing(1)
-                    .withMotorInverted(false)
+                    .withMotorInverted(true)
                     .withIdleMode(MotorMode.COAST)
                     .withStatorCurrentLimit(Amps.of(40))
                     .withMomentOfInertia(Meters.of(.05), Pounds.of(.5))
