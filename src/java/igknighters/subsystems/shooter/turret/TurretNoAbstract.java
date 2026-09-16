@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.constants.SubsystemConstants;
 import igknighters.constants.SubsystemConstants.kShooter.kTurret;
+import igknighters.util.log.Log;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
 import yams.mechanisms.config.PivotConfig;
@@ -43,8 +44,8 @@ public class TurretNoAbstract extends SubsystemBase {
                     .withClosedLoopController(kTurret.kP, kTurret.kI, kTurret.kD)
                     .withSimClosedLoopController(kTurret.kP, kTurret.kI, kTurret.kD)
                     .withTrapezoidalProfile(
-                            RotationsPerSecond.of(kTurret.MAX_SPEED_RPM),
-                            RotationsPerSecondPerSecond.of(kTurret.MAX_ACCELERATION_RPM))
+                            RotationsPerSecond.of(kTurret.MAX_SPEED_RPM / 60),
+                            RotationsPerSecondPerSecond.of(kTurret.MAX_ACCELERATION_RPM / 60))
                     // ----------------------------------------------------------------
                     .withSoftLimits(
                             Degrees.of(kTurret.MIN_ANGLE_DEGREES),
@@ -131,6 +132,7 @@ public class TurretNoAbstract extends SubsystemBase {
     @Override
     public void periodic() {
         shooter.updateTelemetry();
+        Log.log("ROBOT/SUBSYSTEMS/SHOOTER/TURRET/ANGLE", getCurrentAngle().in(Degrees));
     }
 
     @Override
