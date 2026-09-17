@@ -34,6 +34,7 @@ import igknighters.subsystems.Luma.Luma;
 import igknighters.subsystems.Subsystems;
 import igknighters.subsystems.indexer.Indexer;
 import igknighters.subsystems.led.Led;
+import igknighters.subsystems.shooter.Shooter;
 import igknighters.subsystems.swerve.Swerve;
 import igknighters.util.FuelSim;
 import igknighters.util.RobotPosePredError;
@@ -240,7 +241,9 @@ public class Robot extends LoggedRobot {
                         new LimeLightVision(),
                         new Led(90, 2),
                         new Luma(true, "object-detection"),
+                        new Shooter(),
                         new Indexer());
+
         setUpSwerve(subsystems);
         publishCommandsAndSubystems(subsystems);
         setUpAutos(subsystems);
@@ -270,7 +273,9 @@ public class Robot extends LoggedRobot {
                         new LimeLightVision(),
                         new Led(90, 2),
                         new Luma(true, "object-detection"),
+                        new Shooter(),
                         new Indexer());
+
         setUpSwerve(subsystems);
         pose_pred = new RobotPosePredictor(subsystems.swerve);
         publishCommandsAndSubystems(subsystems);
@@ -460,6 +465,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
+        //
         subsystems.vision.enableCameras(0);
         subsystems.swerve.clearActiveTrajectory();
         if (fuelSim != null) {

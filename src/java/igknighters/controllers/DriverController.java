@@ -1,5 +1,8 @@
 package igknighters.controllers;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.RPM;
+
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -10,7 +13,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import igknighters.commands.IndexerCommands;
 import igknighters.commands.Wayfinder;
+import igknighters.commands.shooter.ShooterCommands;
+import igknighters.constants.SubsystemConstants.kShooter.kHood;
 import igknighters.subsystems.Subsystems;
+import igknighters.subsystems.shooter.ShooterState;
 import java.util.function.DoubleSupplier;
 
 /**
@@ -139,6 +145,15 @@ public class DriverController {
      * @param subsystems The robot subsystems available for command targeting.
      */
     public void bind(final Subsystems subsystems) {
+        this.DPU.whileTrue(
+                subsystems.shooter.hood.targetAngleCommand(Degrees.of(kHood.MAX_ANGLE_DEGREES)));
+        this.DPD.whileTrue(
+                subsystems.shooter.hood.targetAngleCommand(Degrees.of(kHood.MIN_ANGLE_DEGREES)));
+        this.A.whileTrue(ShooterCommands.homeHood(subsystems.shooter));
+        this.B.whileTrue(subsystems.shooter.turret.targetAngleCommand(Degrees.of(180)));
+        this.RT.whileTrue(
+                subsystems.shooter.targetStateCommand(
+                        new ShooterState(Degrees.of(40), Degrees.of(-270), RPM.of(300))));
         // Example: this.A.whileTrue(new MyCommand(subsystems.mySubsystem));
         // Swerve driving is handled by the default command set in Robot.java,
         // so no explicit bind is needed here for basic teleop driving.

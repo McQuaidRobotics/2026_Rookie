@@ -222,13 +222,13 @@ public class SubsystemConstants {
         public static class kTurret {
             public static final int MOTOR_ID = 24;
             public static final int CANCODER_ID = 25;
-            public static final double CANCODER_OFFSET_ROTATIONS = -0.747314453125;
+            public static final double CANCODER_OFFSET_ROTATIONS = 0.742919921875;
 
             public static final double xMeterOffset = 7 * Conv.INCHES_TO_METERS;
             public static final double yMeterOffset = 7 * Conv.INCHES_TO_METERS;
             public static final double GEAR_RATIO = 16.2;
-            public static final double MAX_ANGLE_DEGREES = 270.0;
-            public static final double MIN_ANGLE_DEGREES = -90.0;
+            public static final double MAX_ANGLE_DEGREES = 90.0;
+            public static final double MIN_ANGLE_DEGREES = -270.0;
             public static final double MAX_SPEED_RPM = 600.0;
             public static final double MAX_ACCELERATION_RPM = 800.0;
             public static final double MAX_JERK = 300;
@@ -259,7 +259,7 @@ public class SubsystemConstants {
             public static final double MAX_JERK = 1.0;
             public static final int STATOR_CURRENT_LIMIT = 30;
             public static final int SUPPLY_CURRENT_LIMIT = 20;
-            public static final double kP = 4.0;
+            public static final double kP = 20.0;
             public static final double kI = 0.0;
             public static final double kD = 0.0;
             public static final double kS = 0.27;

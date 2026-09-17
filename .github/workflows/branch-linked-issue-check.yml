@@ -1,0 +1,44 @@
+# Changeset rule #6 — verify the branch's leading number references a real OPEN issue
+# (not a PR, not a closed/missing issue). Extends rule #5. Gates at PR time; add as a
+# required status check to make it blocking.
+name: Branch Linked Issue
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  linked-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify an open issue matches the branch prefix
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          num=$(echo "$HEAD_REF" | grep -oE '^[0-9]+' || true)
+          if [ -z "$num" ]; then
+            echo "::error::Branch '$HEAD_REF' has no leading issue number (see the Branch Naming Policy check)."
+            exit 1
+          fi
+          echo "Checking issue #$num ..."
+          http=$(curl -s -o resp.json -w '%{http_code}' \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/issues/$num")
+          if [ "$http" != "200" ]; then
+            echo "::error::No issue #$num found (HTTP $http)."
+            exit 1
+          fi
+          # The issues endpoint also returns PRs; reject those.
+          if [ "$(jq -r 'has("pull_request")' resp.json)" = "true" ]; then
+            echo "::error::#$num is a pull request, not an issue."
+            exit 1
+          fi
+          state=$(jq -r '.state' resp.json)
+          if [ "$state" != "open" ]; then
+            echo "::error::Issue #$num is '$state', not open."
+            exit 1
+          fi
+          echo "OK: open issue #$num — $(jq -r '.title' resp.json)"
