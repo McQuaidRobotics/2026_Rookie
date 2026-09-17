@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import igknighters.commands.SpindexerCommands;
+import igknighters.commands.IndexerCommands;
 import igknighters.commands.Wayfinder;
 import igknighters.subsystems.Subsystems;
 import java.util.function.DoubleSupplier;
@@ -123,7 +123,7 @@ public class DriverController {
         }
         if (debugType == DebugType.INDEXER) {
             this.X.whileTrue(
-                    SpindexerCommands.SummonSpindexeroidTitano(
+                    IndexerCommands.SummonSpindexeroidTitano(
                             subsystems.indexer, RPM.of(2000), RPM.of(2000)));
         } else {
             System.out.println("DEBUG MODE: " + debugType + " (No specialized binds)");

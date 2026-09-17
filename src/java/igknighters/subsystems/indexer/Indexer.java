@@ -14,7 +14,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public Command runSpindexer(AngularVelocity SpindexerSpeed) {
-        return spindexer.run(SpindexerSpeed);
+        return spindexer.spin(SpindexerSpeed);
     }
 
     public Command setExitRollerVoltage(Voltage voltage) {

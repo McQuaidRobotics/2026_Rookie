@@ -10,7 +10,7 @@ public class SpindexerCommands {
     public static Command SummonSpindexeroidTitano(
             Indexer indexer, AngularVelocity exitRollerSpeed, AngularVelocity spindexerSpeed) {
         return Commands.parallel(
-                indexer.spindexer.run(spindexerSpeed),
+                indexer.spindexer.spin(spindexerSpeed),
                 indexer.exitRoller.setAngularVelocityCommand(exitRollerSpeed));
     }
 }
