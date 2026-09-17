@@ -150,8 +150,8 @@ public class DriverController {
         this.A.whileTrue(ShooterCommands.homeHood(subsystems.shooter));
         this.B.whileTrue(subsystems.shooter.turret.targetAngleCommand(Degrees.of(180)));
         this.X.whileTrue(
-                    IndexerCommands.SummonSpindexeroidTitano(
-                            subsystems.indexer, RPM.of(2000), RPM.of(2000)));
+                IndexerCommands.SummonSpindexeroidTitano(
+                        subsystems.indexer, RPM.of(2000), RPM.of(2000)));
         this.RT.whileTrue(
                 subsystems.shooter.targetStateCommand(
                         new ShooterState(Degrees.of(40), Degrees.of(-270), RPM.of(300))));
