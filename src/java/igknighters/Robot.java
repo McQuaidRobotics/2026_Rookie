@@ -412,7 +412,7 @@ public class Robot extends LoggedRobot {
 
     /** Binds commands to the driver controller. */
     public void bindDriverController() {
-        driverController.bind(subsystems, DebugType.INDEXER);
+        driverController.bind(subsystems);
     }
 
     @Override

@@ -79,7 +79,6 @@ public class Subsystems {
         this.shooter.turret.setDefaultCommand(
                 this.shooter.turret.targetAngleCommand(Degrees.of(0)));
         this.indexer.spindexer.setDefaultCommand(this.indexer.spindexer.setVoltage(Volts.of(0)));
-        this.indexer.exitRoller.setDefaultCommand(
-                this.indexer.exitRoller.setVoltageCommand(Volts.of(0)));
+        this.indexer.exitRoller.setDefaultCommand(this.indexer.exitRoller.setVoltage(Volts.of(0)));
     }
 }

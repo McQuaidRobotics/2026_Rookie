@@ -1,20 +1,19 @@
 package igknighters.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
-import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import igknighters.constants.SubsystemConstants.kIndexer.kExitRollers;
-import yams.gearing.MechanismGearing;
+import igknighters.constants.SubsystemConstants;
+import igknighters.constants.SubsystemConstants.kShooter.kFlywheels;
 import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorController;
@@ -25,56 +24,51 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
 public class ExitRoller extends SubsystemBase {
-    private CANcoder exitRollerEncoder = new CANcoder(17, new CANBus("SuperStructureBus"));
-
     private SmartMotorControllerConfig smcConfig =
             new SmartMotorControllerConfig(this)
                     .withControlMode(ControlMode.CLOSED_LOOP)
-                    .withClosedLoopController(1, 0, 0)
-                    .withSimClosedLoopController(1, 0, 0)
-                    .withFeedforward(new SimpleMotorFeedforward(0, 0))
-                    .withSimFeedforward(new SimpleMotorFeedforward(0, 0))
+                    .withClosedLoopController(kFlywheels.kP, kFlywheels.kI, kFlywheels.kD)
+                    .withSimClosedLoopController(50, 0, 0)
+                    .withTrapezoidalProfile(
+                            RotationsPerSecond.of(kFlywheels.MAX_SPEED_RPM / 60),
+                            RotationsPerSecondPerSecond.of(kFlywheels.MAX_ACCELERATION_RPM / 60))
+                    // Feedforward Constants
                     .withTelemetry("ExitRollerMotor", TelemetryVerbosity.HIGH)
-                    .withGearing(new MechanismGearing(1))
-                    .withMotorInverted(false)
+                    .withGearing(1)
+                    .withMotorInverted(true)
                     .withIdleMode(MotorMode.COAST)
                     .withStatorCurrentLimit(Amps.of(40))
-                    .withExternalEncoder(exitRollerEncoder)
-                    .withExternalEncoderInverted(false);
+                    .withMomentOfInertia(Meters.of(.05), Pounds.of(.5));
 
-    private TalonFX kraken = new TalonFX(kExitRollers.LEADER_MOTOR_ID);
+    private TalonFX talon =
+            new TalonFX(17, SubsystemConstants.superStructure); // kyle you can change the id maybe.
 
-    private SmartMotorController smc =
-            new TalonFXWrapper(kraken, DCMotor.getKrakenX44(1), smcConfig);
+    private SmartMotorController talonSmartMotorController =
+            new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
 
-    private FlyWheelConfig flyWheelConfig =
-            new FlyWheelConfig()
-                    .withDiameter(Inches.of(4))
-                    .withMass(Pounds.of(1))
-                    .withTelemetry("ExitRollerMech", TelemetryVerbosity.HIGH)
-                    .withSmartMotorController(smc);
+    private final FlyWheelConfig flyWheelConfig =
+            new FlyWheelConfig().withTelemetry("ExitRollerMech", TelemetryVerbosity.HIGH);
+    private FlyWheel flyWheel = new FlyWheel(flyWheelConfig, talonSmartMotorController);
 
-    private FlyWheel exitRoller = new FlyWheel(flyWheelConfig);
-
-    public AngularVelocity getVelocity() {
-        return exitRoller.getSpeed();
+    public Command setSpeed(AngularVelocity speed) {
+        return this.run(() -> flyWheel.setMechanismVelocitySetpoint(speed));
     }
 
-    public Command setVoltageCommand(Voltage voltage) {
-        return exitRoller.setVoltage(voltage);
+    public Command setVoltage(Voltage voltage) {
+        return flyWheel.setVoltage(voltage);
     }
 
-    public Command setAngularVelocityCommand(AngularVelocity speed) {
-        return exitRoller.run(speed);
-    }
-
-    @Override
-    public void periodic() {
-        exitRoller.updateTelemetry();
+    public void setSpeedNoCommand(AngularVelocity speed) {
+        flyWheel.setMechanismVelocitySetpoint(speed);
     }
 
     @Override
     public void simulationPeriodic() {
-        exitRoller.simIterate();
+        flyWheel.simIterate();
+    }
+
+    @Override
+    public void periodic() {
+        flyWheel.updateTelemetry();
     }
 }
