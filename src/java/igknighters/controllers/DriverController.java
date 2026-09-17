@@ -122,7 +122,6 @@ public class DriverController {
             this.X.whileTrue(Wayfinder.driveToTarget(swerve, new Pose2d(3, 1, new Rotation2d(0))));
         }
         if (debugType == DebugType.INDEXER) {
-            System.out.println("BIND IS INDEXER");
             this.X.whileTrue(
                     SpindexerCommands.SummonSpindexeroidTitano(
                             subsystems.indexer, RPM.of(2000), RPM.of(2000)));

@@ -232,7 +232,6 @@ public class Robot extends LoggedRobot {
 
     /** Default constructor for the Robot class. Initializes all systems and subsystems. */
     public Robot() {
-        System.out.println("Is this even running");
         setUpAdvantageScope();
         setUpCommandLogging();
         subsystems =
@@ -263,7 +262,6 @@ public class Robot extends LoggedRobot {
      * @param isSwerveDisabled True if the swerve drive should be disabled.
      */
     public Robot(boolean isSwerveDisabled) {
-        System.out.println("Is this even running");
         setUpAdvantageScope();
         setUpCommandLogging();
         subsystems =
@@ -409,7 +407,6 @@ public class Robot extends LoggedRobot {
 
     /** Binds commands to the driver controller. */
     public void bindDriverController() {
-        System.out.println("controller is bound");
         driverController.bind(subsystems, DebugType.INDEXER);
     }
 

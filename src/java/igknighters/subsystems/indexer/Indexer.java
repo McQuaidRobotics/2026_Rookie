@@ -10,8 +10,7 @@ public class Indexer extends SubsystemBase {
     public final Spindexer spindexer = new Spindexer();
 
     public Command runExitRoller(AngularVelocity ExitRollerSpeed) {
-        System.out.println("Exit Roller Running");
-        return exitRoller.run(ExitRollerSpeed);
+        return exitRoller.setAngularVelocityCommand(ExitRollerSpeed);
     }
 
     public Command runSpindexer(AngularVelocity SpindexerSpeed) {
@@ -19,7 +18,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public Command setExitRollerVoltage(Voltage voltage) {
-        return exitRoller.setVoltage(voltage);
+        return exitRoller.setVoltageCommand(voltage);
     }
 
     public Command setSpindexerVoltage(Voltage voltage) {

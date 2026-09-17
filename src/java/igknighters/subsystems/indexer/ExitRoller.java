@@ -60,12 +60,11 @@ public class ExitRoller extends SubsystemBase {
         return exitRoller.getSpeed();
     }
 
-    public Command setVoltage(Voltage voltage) {
+    public Command setVoltageCommand(Voltage voltage) {
         return exitRoller.setVoltage(voltage);
     }
 
-    public Command run(AngularVelocity speed) {
-        System.out.println("Exit Roller Motor is running");
+    public Command setAngularVelocityCommand(AngularVelocity speed) {
         return exitRoller.run(speed);
     }
 

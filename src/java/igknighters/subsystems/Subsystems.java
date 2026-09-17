@@ -1,7 +1,8 @@
 package igknighters.subsystems;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import igknighters.commands.SpindexerCommands;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
 import igknighters.subsystems.indexer.Indexer;
@@ -47,8 +48,13 @@ public class Subsystems {
         this.led = led;
         this.luma = luma;
         this.indexer = indexer;
-        this.lockedResources = new SubsystemBase[] {swerve, vision, led, luma};
+        this.lockedResources =
+                new SubsystemBase[] {
+                    swerve, vision, led, luma, indexer, indexer.spindexer, indexer.exitRoller
+                };
 
-        this.indexer.setDefaultCommand(SpindexerCommands.SHUTUP(this.indexer));
+        this.indexer.spindexer.setDefaultCommand(this.indexer.spindexer.setVoltage(Volts.of(0)));
+        this.indexer.exitRoller.setDefaultCommand(
+                this.indexer.exitRoller.setVoltageCommand(Volts.of(0)));
     }
 }
