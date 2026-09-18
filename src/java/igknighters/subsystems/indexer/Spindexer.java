@@ -13,6 +13,7 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.constants.SubsystemConstants;
+import igknighters.constants.SubsystemConstants.kIndexer.kSpindexer;
 import igknighters.constants.SubsystemConstants.kShooter.kFlywheels;
 import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.velocity.FlyWheel;
@@ -35,13 +36,15 @@ public class Spindexer extends SubsystemBase {
                     // Feedforward Constants
                     .withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH)
                     .withGearing(1)
-                    .withMotorInverted(true)
+                    .withMotorInverted(false)
                     .withIdleMode(MotorMode.COAST)
                     .withStatorCurrentLimit(Amps.of(40))
                     .withMomentOfInertia(Meters.of(.05), Pounds.of(.5));
 
     private TalonFX talon =
-            new TalonFX(18, SubsystemConstants.superStructure); // kyle you can change the id maybe.
+            new TalonFX(
+                    kSpindexer.LEADER_MOTOR_ID,
+                    SubsystemConstants.superStructure); // kyle you can change the id maybe.
 
     private SmartMotorController talonSmartMotorController =
             new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
