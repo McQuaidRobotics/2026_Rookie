@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import igknighters.commands.IndexerCommands;
 import igknighters.commands.Wayfinder;
 import igknighters.commands.shooter.ShooterCommands;
 import igknighters.constants.SubsystemConstants.kShooter.kHood;
@@ -123,6 +124,11 @@ public class DriverController {
         if (debugType == DebugType.SWERVE) {
             // Example: Bind X button to drive to a fixed field coordinate for swerve testing.
             this.X.whileTrue(Wayfinder.driveToTarget(swerve, new Pose2d(3, 1, new Rotation2d(0))));
+        }
+        if (debugType == DebugType.INDEXER) {
+            this.X.whileTrue(
+                    IndexerCommands.SummonSpindexeroidTitano(
+                            subsystems.indexer, RPM.of(2000), RPM.of(2000)));
         } else {
             System.out.println("DEBUG MODE: " + debugType + " (No specialized binds)");
         }
@@ -143,6 +149,9 @@ public class DriverController {
                 subsystems.shooter.hood.targetAngleCommand(Degrees.of(kHood.MIN_ANGLE_DEGREES)));
         this.A.whileTrue(ShooterCommands.homeHood(subsystems.shooter));
         this.B.whileTrue(subsystems.shooter.turret.targetAngleCommand(Degrees.of(180)));
+        this.X.whileTrue(
+                IndexerCommands.SummonSpindexeroidTitano(
+                        subsystems.indexer, RPM.of(2000), RPM.of(2000)));
         this.RT.whileTrue(
                 subsystems.shooter.targetStateCommand(
                         new ShooterState(Degrees.of(40), Degrees.of(-270), RPM.of(300))));
