@@ -1,6 +1,7 @@
 package igknighters.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.constants.SubsystemConstants.kShooter.kHood;
@@ -52,11 +53,23 @@ public class Subsystems {
         this.luma = luma;
         this.lockedResources =
                 new SubsystemBase[] {
-                    swerve, vision, led, luma, shooter, shooter.hood, shooter.turret
+                    swerve,
+                    vision,
+                    led,
+                    luma,
+                    shooter,
+                    shooter.hood,
+                    shooter.turret,
+                    shooter.flyWheel
                 };
         this.shooter.hood.setDefaultCommand(
                 shooter.hood.targetAngleCommand(Degrees.of(kHood.MIN_ANGLE_DEGREES)));
         this.shooter.turret.setDefaultCommand(
                 this.shooter.turret.targetAngleCommand(Degrees.of(0)));
+        this.shooter.flyWheel.setDefaultCommand(
+                this.shooter
+                        .flyWheel
+                        .setSpeed(RPM.of(2000))
+                        .withName("IDLING THE FLYWHEELS AT 2000 RPM"));
     }
 }
