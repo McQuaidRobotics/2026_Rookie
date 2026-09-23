@@ -280,6 +280,10 @@ public class Robot extends LoggedRobot {
         bindDriverController();
 
         subsystemTriggers.SetupTriggers(subsystems, driverController, poseSupplier());
+
+        if (isSimulation()) {
+            configureFuelSim();
+        }
     }
 
     /**
