@@ -514,13 +514,13 @@ public class Robot extends LoggedRobot {
 
             // Example of how to integrate mechanism simulation with fuel simulation
             double currentTime = RobotController.getFPGATime() / 1.0e6;
-            double flywheelRPM = subsystems.shooter.getFlywheelVelocity().in(RPM);
+            double flywheelRads = subsystems.shooter.getFlywheelVelocity().in(RadiansPerSecond);
             // double spindexerRPM = subsystems.indexer.getSpindexerVelocity().in(RPM);
             double spindexerRPM = 100; // the above code is how it should work. However since spindexer is not in main we assume it to be true.
             
-            if (currentTime - lastShotTime > 0.1 && flywheelRPM > 100 && spindexerRPM > 50 ) { // Launch every 100 ms when both flywheel and spindexer are running
+            if (currentTime - lastShotTime > 0.1 && flywheelRads > 100 && spindexerRPM > 50 ) { // Launch every 100 ms when both flywheel and spindexer are running
                 double flywheelRadius = SubsystemConstants.kShooter.kFlywheels.WHEEL_RADIUS_METERS;
-                double launchVelocity = (flywheelRPM * flywheelRadius) / 2.0;
+                double launchVelocity = (flywheelRads * flywheelRadius) / 2.0;
                 Angle launchAngle = Degrees.of(90).minus(subsystems.shooter.getHoodAngle()); // note 0 is horizontal launch and 90 is vertical launch which is backwards of what we do which is why this is needed
                 Angle turretAngle = subsystems.shooter.getTurretAngle();
 
