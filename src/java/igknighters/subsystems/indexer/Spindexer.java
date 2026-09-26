@@ -44,7 +44,7 @@ public class Spindexer extends SubsystemBase {
     private TalonFX talon =
             new TalonFX(
                     kSpindexer.LEADER_MOTOR_ID,
-                    SubsystemConstants.superStructure); // kyle you can change the id maybe.
+                    SubsystemConstants.superStructure);
 
     private SmartMotorController talonSmartMotorController =
             new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
@@ -58,6 +58,7 @@ public class Spindexer extends SubsystemBase {
     }
 
     public Command setVoltage(Voltage voltage) {
+       
         return flyWheel.setVoltage(voltage);
     }
 
@@ -65,6 +66,10 @@ public class Spindexer extends SubsystemBase {
         flyWheel.setMechanismVelocitySetpoint(speed);
     }
 
+    public void setVoltageNoCommand(Voltage voltage){
+        flyWheel.setVoltageSetpoint(voltage);
+    }
+    
     @Override
     public void simulationPeriodic() {
         flyWheel.simIterate();

@@ -62,6 +62,10 @@ public class ExitRoller extends SubsystemBase {
         flyWheel.setMechanismVelocitySetpoint(speed);
     }
 
+    public void setVoltageNoCommand(Voltage voltage){
+        flyWheel.setVoltageSetpoint(voltage);
+    }
+
     @Override
     public void simulationPeriodic() {
         flyWheel.simIterate();
