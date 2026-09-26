@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import igknighters.commands.IndexerCommands;
 import igknighters.commands.Wayfinder;
-import igknighters.commands.shooter.ShooterCommands;
-import igknighters.constants.SubsystemConstants.kShooter.kHood;
 import igknighters.subsystems.Subsystems;
 import igknighters.subsystems.shooter.ShooterState;
 import java.util.function.DoubleSupplier;
@@ -143,12 +141,7 @@ public class DriverController {
      * @param subsystems The robot subsystems available for command targeting.
      */
     public void bind(final Subsystems subsystems) {
-        this.DPU.whileTrue(
-                subsystems.shooter.hood.targetAngleCommand(Degrees.of(kHood.MAX_ANGLE_DEGREES)));
-        this.DPD.whileTrue(
-                subsystems.shooter.hood.targetAngleCommand(Degrees.of(kHood.MIN_ANGLE_DEGREES)));
-        this.A.whileTrue(ShooterCommands.homeHood(subsystems.shooter));
-        this.B.whileTrue(subsystems.shooter.turret.targetAngleCommand(Degrees.of(180)));
+        this.A.whileTrue(subsystems.shooter.flyWheel.setSpeed(RPM.of(1000)));
         this.X.whileTrue(
                 IndexerCommands.SummonSpindexeroidTitano(
                         subsystems.indexer, RPM.of(2000), RPM.of(2000)));
