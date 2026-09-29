@@ -2,8 +2,6 @@ package igknighters.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
@@ -40,10 +38,13 @@ public class ExitRoller extends SubsystemBase {
                     .withMotorInverted(true)
                     .withIdleMode(MotorMode.COAST)
                     .withStatorCurrentLimit(Amps.of(kExitRollers.STATOR_CURRENT_LIMIT))
-                    .withMomentOfInertia(KilogramSquareMeters.of(kExitRollers.MOMENT_OF_INERTIA_KG_M2));
+                    .withMomentOfInertia(
+                            KilogramSquareMeters.of(kExitRollers.MOMENT_OF_INERTIA_KG_M2));
 
     private TalonFX talon =
-            new TalonFX(kExitRollers.LEADER_MOTOR_ID, SubsystemConstants.superStructure); // kyle you can change the id maybe.
+            new TalonFX(
+                    kExitRollers.LEADER_MOTOR_ID,
+                    SubsystemConstants.superStructure); // kyle you can change the id maybe.
 
     private SmartMotorController talonSmartMotorController =
             new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
@@ -64,7 +65,7 @@ public class ExitRoller extends SubsystemBase {
         flyWheel.setMechanismVelocitySetpoint(speed);
     }
 
-    public void setVoltageNoCommand(Voltage voltage){
+    public void setVoltageNoCommand(Voltage voltage) {
         flyWheel.setVoltageSetpoint(voltage);
     }
 

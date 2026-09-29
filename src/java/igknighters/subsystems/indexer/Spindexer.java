@@ -2,15 +2,12 @@ package igknighters.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,7 +27,10 @@ public class Spindexer extends SubsystemBase {
     private SmartMotorControllerConfig smcConfig =
             new SmartMotorControllerConfig(this)
                     .withControlMode(ControlMode.CLOSED_LOOP)
-                    .withClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD) //im commenting on this are you happy
+                    .withClosedLoopController(
+                            kSpindexer.kP,
+                            kSpindexer.kI,
+                            kSpindexer.kD) // im commenting on this are you happy
                     .withSimClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD)
                     .withTrapezoidalProfile(
                             RotationsPerSecond.of(kFlywheels.MAX_SPEED_RPM / 60),
@@ -41,12 +41,11 @@ public class Spindexer extends SubsystemBase {
                     .withMotorInverted(false)
                     .withIdleMode(MotorMode.COAST)
                     .withStatorCurrentLimit(Amps.of(kSpindexer.STATOR_CURRENT_LIMIT))
-                    .withMomentOfInertia(KilogramSquareMeters.of(kSpindexer.MOMENT_OF_INERTIA_KG_M2));
+                    .withMomentOfInertia(
+                            KilogramSquareMeters.of(kSpindexer.MOMENT_OF_INERTIA_KG_M2));
 
     private TalonFX talon =
-            new TalonFX(
-                    kSpindexer.LEADER_MOTOR_ID,
-                    SubsystemConstants.superStructure);
+            new TalonFX(kSpindexer.LEADER_MOTOR_ID, SubsystemConstants.superStructure);
 
     private SmartMotorController talonSmartMotorController =
             new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
@@ -60,7 +59,7 @@ public class Spindexer extends SubsystemBase {
     }
 
     public Command setVoltage(Voltage voltage) {
-       
+
         return flyWheel.setVoltage(voltage);
     }
 
@@ -68,10 +67,10 @@ public class Spindexer extends SubsystemBase {
         flyWheel.setMechanismVelocitySetpoint(speed);
     }
 
-    public void setVoltageNoCommand(Voltage voltage){
+    public void setVoltageNoCommand(Voltage voltage) {
         flyWheel.setVoltageSetpoint(voltage);
     }
-    
+
     @Override
     public void simulationPeriodic() {
         flyWheel.simIterate();

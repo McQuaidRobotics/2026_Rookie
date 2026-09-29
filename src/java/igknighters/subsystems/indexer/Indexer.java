@@ -9,11 +9,12 @@ public class Indexer extends SubsystemBase {
     public final ExitRoller exitRoller = new ExitRoller();
     public final Spindexer spindexer = new Spindexer();
 
-    public Command setState(AngularVelocity exitRollerSpeed, AngularVelocity spindexerSpeed){
-        return Commands.parallel(exitRoller.setSpeed(exitRollerSpeed), spindexer.setSpeed(spindexerSpeed));
+    public Command setState(AngularVelocity exitRollerSpeed, AngularVelocity spindexerSpeed) {
+        return Commands.parallel(
+                exitRoller.setSpeed(exitRollerSpeed), spindexer.setSpeed(spindexerSpeed));
     }
 
-    public void setStateNoCommand(AngularVelocity exitRollerSpeed, AngularVelocity spindexerSpeed){
+    public void setStateNoCommand(AngularVelocity exitRollerSpeed, AngularVelocity spindexerSpeed) {
         exitRoller.setSpeedNoCommand(exitRollerSpeed);
         spindexer.setSpeedNoCommand(spindexerSpeed);
     }

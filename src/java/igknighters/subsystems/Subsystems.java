@@ -64,7 +64,17 @@ public class Subsystems {
         this.indexer = indexer;
         this.lockedResources =
                 new SubsystemBase[] {
-                    swerve, vision, led, luma, shooter, shooter.hood, shooter.turret, shooter.flyWheel, indexer, indexer.spindexer, indexer.exitRoller
+                    swerve,
+                    vision,
+                    led,
+                    luma,
+                    shooter,
+                    shooter.hood,
+                    shooter.turret,
+                    shooter.flyWheel,
+                    indexer,
+                    indexer.spindexer,
+                    indexer.exitRoller
                 };
         this.shooter.hood.setDefaultCommand(
                 shooter.hood.targetAngleCommand(Degrees.of(kHood.MIN_ANGLE_DEGREES)));
