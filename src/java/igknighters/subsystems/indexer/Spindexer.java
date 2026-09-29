@@ -30,7 +30,7 @@ public class Spindexer extends SubsystemBase {
                     .withClosedLoopController(
                             kSpindexer.kP,
                             kSpindexer.kI,
-                            kSpindexer.kD) // im commenting on this are you happy
+                            kSpindexer.kD)
                     .withSimClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD)
                     .withTrapezoidalProfile(
                             RotationsPerSecond.of(kFlywheels.MAX_SPEED_RPM / 60),

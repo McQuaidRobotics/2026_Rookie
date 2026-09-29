@@ -44,7 +44,7 @@ public class ExitRoller extends SubsystemBase {
     private TalonFX talon =
             new TalonFX(
                     kExitRollers.LEADER_MOTOR_ID,
-                    SubsystemConstants.superStructure); // kyle you can change the id maybe.
+                    SubsystemConstants.superStructure);
 
     private SmartMotorController talonSmartMotorController =
             new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
