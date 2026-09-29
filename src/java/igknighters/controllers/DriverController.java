@@ -9,10 +9,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import igknighters.Robot;
 import igknighters.commands.Wayfinder;
+import igknighters.commands.shooter.ShooterCommands;
 import igknighters.subsystems.Subsystems;
 import igknighters.subsystems.shooter.ShooterState;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 /**
  * Wrapper for the driver's Xbox controller, providing a clean interface for button triggers and
@@ -137,8 +140,8 @@ public class DriverController {
     public void bind(final Subsystems subsystems) {
         this.A.whileTrue(subsystems.shooter.flyWheel.setSpeed(RPM.of(1000)));
         this.RT.whileTrue(
-                subsystems.shooter.targetStateCommand(
-                        new ShooterState(Degrees.of(40), Degrees.of(-270), RPM.of(300))));
+                ShooterCommands.shoot(subsystems.shooter,() -> Robot.pose_pred.getPredictedPose()
+                ));
         // Example: this.A.whileTrue(new MyCommand(subsystems.mySubsystem));
         // Swerve driving is handled by the default command set in Robot.java,
         // so no explicit bind is needed here for basic teleop driving.

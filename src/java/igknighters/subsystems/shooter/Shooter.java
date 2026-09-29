@@ -45,8 +45,13 @@ public class Shooter extends SubsystemBase {
                                 + ", RPM: "
                                 + state.flywheelVelocity.in(RPM));
     }
+    public ShooterState currentState(Shooter shooter){
+        return new ShooterState(shooter.hood.getCurrentAngle(),shooter.turret.getCurrentAngle(),shooter.flyWheel.getSpeed());
+
+    }
 
     public boolean isHoodSensorHit() {
         return hood.getHoodLimit();
     }
+
 }
