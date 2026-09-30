@@ -33,7 +33,7 @@ public class Spindexer extends SubsystemBase {
                             RotationsPerSecondPerSecond.of(kSpindexer.MAX_ACCELERATION_RPM / 60))
                     // Feedforward Constants
                     .withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH)
-                    .withGearing(1)
+                    .withGearing(kSpindexer.GEAR_RATIO)
                     .withMotorInverted(false)
                     .withIdleMode(MotorMode.COAST)
                     .withStatorCurrentLimit(Amps.of(kSpindexer.STATOR_CURRENT_LIMIT))
