@@ -12,6 +12,7 @@ import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.constants.SubsystemConstants;
+import igknighters.constants.SubsystemConstants.kIndexer.kExitRollers;
 import igknighters.constants.SubsystemConstants.kIndexer.kSpindexer;
 import igknighters.constants.SubsystemConstants.kShooter.kFlywheels;
 import yams.mechanisms.config.FlyWheelConfig;
@@ -33,8 +34,8 @@ public class Spindexer extends SubsystemBase {
                             kSpindexer.kD)
                     .withSimClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD)
                     .withTrapezoidalProfile(
-                            RotationsPerSecond.of(kFlywheels.MAX_SPEED_RPM / 60),
-                            RotationsPerSecondPerSecond.of(kFlywheels.MAX_ACCELERATION_RPM / 60))
+                            RotationsPerSecond.of(kSpindexer.MAX_SPEED_RPM / 60),
+                            RotationsPerSecondPerSecond.of(kSpindexer.MAX_ACCELERATION_RPM / 60))
                     // Feedforward Constants
                     .withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH)
                     .withGearing(1)

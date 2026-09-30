@@ -30,8 +30,8 @@ public class ExitRoller extends SubsystemBase {
                     .withClosedLoopController(kExitRollers.kP, kExitRollers.kI, kExitRollers.kD)
                     .withSimClosedLoopController(kExitRollers.kP, kExitRollers.kI, kExitRollers.kD)
                     .withTrapezoidalProfile(
-                            RotationsPerSecond.of(kFlywheels.MAX_SPEED_RPM / 60),
-                            RotationsPerSecondPerSecond.of(kFlywheels.MAX_ACCELERATION_RPM / 60))
+                            RotationsPerSecond.of(kExitRollers.MAX_SPEED_RPM / 60),
+                            RotationsPerSecondPerSecond.of(kExitRollers.MAX_ACCELERATION_RPM / 60))
                     // Feedforward Constants
                     .withTelemetry("ExitRollerMotor", TelemetryVerbosity.HIGH)
                     .withGearing(1)
