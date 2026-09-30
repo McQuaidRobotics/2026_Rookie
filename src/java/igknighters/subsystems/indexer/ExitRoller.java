@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.constants.SubsystemConstants;
 import igknighters.constants.SubsystemConstants.kIndexer.kExitRollers;
-import igknighters.constants.SubsystemConstants.kShooter.kFlywheels;
 import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorController;
@@ -42,9 +41,7 @@ public class ExitRoller extends SubsystemBase {
                             KilogramSquareMeters.of(kExitRollers.MOMENT_OF_INERTIA_KG_M2));
 
     private TalonFX talon =
-            new TalonFX(
-                    kExitRollers.LEADER_MOTOR_ID,
-                    SubsystemConstants.superStructure);
+            new TalonFX(kExitRollers.LEADER_MOTOR_ID, SubsystemConstants.superStructure);
 
     private SmartMotorController talonSmartMotorController =
             new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
