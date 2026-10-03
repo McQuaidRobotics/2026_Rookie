@@ -37,6 +37,7 @@ public class Spindexer extends SubsystemBase {
                     .withMotorInverted(false)
                     .withIdleMode(MotorMode.COAST)
                     .withStatorCurrentLimit(Amps.of(kSpindexer.STATOR_CURRENT_LIMIT))
+                    .withSupplyCurrentLimit(Amps.of(kSpindexer.SUPPLY_CURRENT_LIMIT))
                     .withMomentOfInertia(
                             KilogramSquareMeters.of(kSpindexer.MOMENT_OF_INERTIA_KG_M2));
 

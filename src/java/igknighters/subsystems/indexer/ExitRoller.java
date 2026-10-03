@@ -1,5 +1,6 @@
 package igknighters.subsystems.indexer;
 
+import static edu.wpi.first.units.Units.Amp;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -37,6 +38,7 @@ public class ExitRoller extends SubsystemBase {
                     .withMotorInverted(true)
                     .withIdleMode(MotorMode.COAST)
                     .withStatorCurrentLimit(Amps.of(kExitRollers.STATOR_CURRENT_LIMIT))
+                    .withSupplyCurrentLimit(Amps.of(kExitRollers.SUPPLY_CURRENT_LIMIT))
                     .withMomentOfInertia(
                             KilogramSquareMeters.of(kExitRollers.MOMENT_OF_INERTIA_KG_M2));
 
