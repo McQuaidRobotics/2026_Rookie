@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
@@ -23,7 +24,20 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
 public class Spindexer extends SubsystemBase {
-    private SmartMotorControllerConfig smcConfig =
+    private SmartMotorControllerConfig smcConfig = smcConfigBuilder();
+
+    private TalonFX talon =
+            new TalonFX(kSpindexer.LEADER_MOTOR_ID, SubsystemConstants.superStructure);
+
+    private SmartMotorController talonSmartMotorController =
+            new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
+
+    private final FlyWheelConfig flyWheelConfig = flyWheelConfigBuilder();
+
+    private FlyWheel flyWheel = new FlyWheel(flyWheelConfig, talonSmartMotorController);
+
+    private SmartMotorControllerConfig smcConfigBuilder(){
+        SmartMotorControllerConfig config =
             new SmartMotorControllerConfig(this)
                     .withControlMode(ControlMode.CLOSED_LOOP)
                     .withClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD)
@@ -40,17 +54,16 @@ public class Spindexer extends SubsystemBase {
                     .withSupplyCurrentLimit(Amps.of(kSpindexer.SUPPLY_CURRENT_LIMIT))
                     .withMomentOfInertia(
                             KilogramSquareMeters.of(kSpindexer.MOMENT_OF_INERTIA_KG_M2));
+        config = kSpindexer.disableSpindexerLogs ? config : config.withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH);
+        return config;
+    }
 
-    private TalonFX talon =
-            new TalonFX(kSpindexer.LEADER_MOTOR_ID, SubsystemConstants.superStructure);
-
-    private SmartMotorController talonSmartMotorController =
-            new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
-
-    private final FlyWheelConfig flyWheelConfig =
-            new FlyWheelConfig().withTelemetry("SpindexerMech", TelemetryVerbosity.HIGH);
-    private FlyWheel flyWheel = new FlyWheel(flyWheelConfig, talonSmartMotorController);
-
+    private FlyWheelConfig flyWheelConfigBuilder(){
+        FlyWheelConfig config =
+            new FlyWheelConfig();
+        config = kSpindexer.disableSpindexerLogs ? config : config.withTelemetry("SpindexerMech", TelemetryVerbosity.HIGH);
+        return config;
+    }
     public Command setSpeed(AngularVelocity speed) {
         return this.run(() -> flyWheel.setMechanismVelocitySetpoint(speed));
     }

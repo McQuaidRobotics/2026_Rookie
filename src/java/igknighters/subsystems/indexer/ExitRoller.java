@@ -24,7 +24,19 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
 public class ExitRoller extends SubsystemBase {
-    private SmartMotorControllerConfig smcConfig =
+    private SmartMotorControllerConfig smcConfig = smcConfigBuilder();
+
+    private TalonFX talon =
+            new TalonFX(kExitRollers.LEADER_MOTOR_ID, SubsystemConstants.superStructure);
+
+    private SmartMotorController talonSmartMotorController =
+            new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
+
+    private final FlyWheelConfig flyWheelConfig = flyWheelConfigBuilder();
+    private FlyWheel flyWheel = new FlyWheel(flyWheelConfig, talonSmartMotorController);
+
+    private SmartMotorControllerConfig smcConfigBuilder(){
+     SmartMotorControllerConfig config =
             new SmartMotorControllerConfig(this)
                     .withControlMode(ControlMode.CLOSED_LOOP)
                     .withClosedLoopController(kExitRollers.kP, kExitRollers.kI, kExitRollers.kD)
@@ -33,7 +45,6 @@ public class ExitRoller extends SubsystemBase {
                             RotationsPerSecond.of(kExitRollers.MAX_SPEED_RPM / 60),
                             RotationsPerSecondPerSecond.of(kExitRollers.MAX_ACCELERATION_RPM / 60))
                     // Feedforward Constants
-                    .withTelemetry("ExitRollerMotor", TelemetryVerbosity.HIGH)
                     .withGearing(kExitRollers.GEAR_RATIO)
                     .withMotorInverted(true)
                     .withIdleMode(MotorMode.COAST)
@@ -41,16 +52,19 @@ public class ExitRoller extends SubsystemBase {
                     .withSupplyCurrentLimit(Amps.of(kExitRollers.SUPPLY_CURRENT_LIMIT))
                     .withMomentOfInertia(
                             KilogramSquareMeters.of(kExitRollers.MOMENT_OF_INERTIA_KG_M2));
+            
+        config = kExitRollers.disableExitRollersLogs ? config : config.withTelemetry("ExitRollerMotor", TelemetryVerbosity.HIGH);
+        return smcConfig;
+    }
 
-    private TalonFX talon =
-            new TalonFX(kExitRollers.LEADER_MOTOR_ID, SubsystemConstants.superStructure);
-
-    private SmartMotorController talonSmartMotorController =
-            new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
-
-    private final FlyWheelConfig flyWheelConfig =
+    private FlyWheelConfig flyWheelConfigBuilder(){
+        FlyWheelConfig config =
             new FlyWheelConfig().withTelemetry("ExitRollerMech", TelemetryVerbosity.HIGH);
-    private FlyWheel flyWheel = new FlyWheel(flyWheelConfig, talonSmartMotorController);
+
+        config = kExitRollers.disableExitRollersLogs ? config : config.withTelemetry("ExitRollerMech", TelemetryVerbosity.HIGH);
+        return config;
+        
+    }
 
     public Command setSpeed(AngularVelocity speed) {
         return this.run(() -> flyWheel.setMechanismVelocitySetpoint(speed));
