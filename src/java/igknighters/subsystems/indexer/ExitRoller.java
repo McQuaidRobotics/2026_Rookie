@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
+
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -13,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.constants.SubsystemConstants;
 import igknighters.constants.SubsystemConstants.kIndexer.kExitRollers;
-import igknighters.constants.SubsystemConstants.kIndexer.kSpindexer;
 import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorController;
@@ -34,7 +34,7 @@ public class ExitRoller extends SubsystemBase {
                             RotationsPerSecondPerSecond.of(kExitRollers.MAX_ACCELERATION_RPM / 60))
                     // Feedforward Constants
                     .withTelemetry("ExitRollerMotor", TelemetryVerbosity.HIGH)
-                    .withGearing(kSpindexer.GEAR_RATIO)
+                    .withGearing(kExitRollers.GEAR_RATIO)
                     .withMotorInverted(true)
                     .withIdleMode(MotorMode.COAST)
                     .withStatorCurrentLimit(Amps.of(kExitRollers.STATOR_CURRENT_LIMIT))
