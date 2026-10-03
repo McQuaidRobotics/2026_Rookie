@@ -22,9 +22,9 @@ public class Solver {
     public static LerpTable hoodTable =
             new LerpTable(
                     new LerpTableEntry[] {
-                        new LerpTableEntry(0, 20),
-                        new LerpTableEntry(10, 25),
-                        new LerpTableEntry(20, 30)
+                        new LerpTableEntry(0, 18.6),
+                        new LerpTableEntry(1, 19),
+                        new LerpTableEntry(2, 25)
                     });
 
     public static ShooterState solve(Pose2d pose, Pose2d target) {

@@ -141,13 +141,11 @@ public class DriverController {
      * @param subsystems The robot subsystems available for command targeting.
      */
     public void bind(final Subsystems subsystems) {
-        this.A.whileTrue(subsystems.shooter.flyWheel.setSpeed(RPM.of(1000)));
-        this.X.whileTrue(
-                IndexerCommands.SummonSpindexeroidTitano(
-                        subsystems.indexer, RPM.of(2000), RPM.of(2000)));
         this.RT.whileTrue(
                 ShooterCommands.shoot(
-                        subsystems.shooter, () -> Robot.pose_pred.getPredictedPose()));
+                        subsystems.shooter,
+                        () -> Robot.pose_pred.getPredictedPose(),
+                        subsystems.indexer));
         // Example: this.A.whileTrue(new MyCommand(subsystems.mySubsystem));
         // Swerve driving is handled by the default command set in Robot.java,
         // so no explicit bind is needed here for basic teleop driving.
