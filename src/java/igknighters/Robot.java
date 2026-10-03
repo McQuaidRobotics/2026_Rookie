@@ -31,6 +31,7 @@ import igknighters.controllers.DriverController;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
 import igknighters.subsystems.Subsystems;
+import igknighters.subsystems.indexer.Indexer;
 import igknighters.subsystems.led.Led;
 import igknighters.subsystems.shooter.Shooter;
 import igknighters.subsystems.swerve.Swerve;
@@ -239,7 +240,8 @@ public class Robot extends LoggedRobot {
                         new LimeLightVision(),
                         new Led(90, 2),
                         new Luma(true, "object-detection"),
-                        new Shooter());
+                        new Shooter(),
+                        new Indexer());
 
         setUpSwerve(subsystems);
         publishCommandsAndSubystems(subsystems);
@@ -270,7 +272,8 @@ public class Robot extends LoggedRobot {
                         new LimeLightVision(),
                         new Led(90, 2),
                         new Luma(true, "object-detection"),
-                        new Shooter());
+                        new Shooter(),
+                        new Indexer());
 
         setUpSwerve(subsystems);
         pose_pred = new RobotPosePredictor(subsystems.swerve);

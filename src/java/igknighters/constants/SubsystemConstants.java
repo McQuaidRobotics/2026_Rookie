@@ -100,6 +100,8 @@ public class SubsystemConstants {
             public static final double MAX_ACCELERATION_RPM = 1500.0;
             public static final double MOTION_MAGIC_JERK = 5000.0;
             public static final int BEAM_BREAK_SENSOR_CHANNEL = 0;
+            public static final int STATOR_CURRENT_LIMIT =
+                    35; // copied and pasted from spindexer limit
             public static final double kP = 0.3; // .5 max
             public static final double kI = 0.1;
             public static final double kD = 0.0;

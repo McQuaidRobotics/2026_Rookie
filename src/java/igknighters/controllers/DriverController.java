@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import igknighters.Robot;
+import igknighters.commands.IndexerCommands;
 import igknighters.commands.Wayfinder;
 import igknighters.commands.shooter.ShooterCommands;
 import igknighters.subsystems.Subsystems;
@@ -121,6 +122,11 @@ public class DriverController {
         if (debugType == DebugType.SWERVE) {
             // Example: Bind X button to drive to a fixed field coordinate for swerve testing.
             this.X.whileTrue(Wayfinder.driveToTarget(swerve, new Pose2d(3, 1, new Rotation2d(0))));
+        }
+        if (debugType == DebugType.INDEXER) {
+            this.X.whileTrue(
+                    IndexerCommands.SummonSpindexeroidTitano(
+                            subsystems.indexer, RPM.of(2000), RPM.of(2000)));
         } else {
             System.out.println("DEBUG MODE: " + debugType + " (No specialized binds)");
         }
@@ -136,6 +142,9 @@ public class DriverController {
      */
     public void bind(final Subsystems subsystems) {
         this.A.whileTrue(subsystems.shooter.flyWheel.setSpeed(RPM.of(1000)));
+        this.X.whileTrue(
+                IndexerCommands.SummonSpindexeroidTitano(
+                        subsystems.indexer, RPM.of(2000), RPM.of(2000)));
         this.RT.whileTrue(
                 ShooterCommands.shoot(
                         subsystems.shooter, () -> Robot.pose_pred.getPredictedPose()));
