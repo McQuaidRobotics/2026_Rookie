@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
@@ -36,34 +35,42 @@ public class Spindexer extends SubsystemBase {
 
     private FlyWheel flyWheel = new FlyWheel(flyWheelConfig, talonSmartMotorController);
 
-    private SmartMotorControllerConfig smcConfigBuilder(){
+    private SmartMotorControllerConfig smcConfigBuilder() {
         SmartMotorControllerConfig config =
-            new SmartMotorControllerConfig(this)
-                    .withControlMode(ControlMode.CLOSED_LOOP)
-                    .withClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD)
-                    .withSimClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD)
-                    .withTrapezoidalProfile(
-                            RotationsPerSecond.of(kSpindexer.MAX_SPEED_RPM / 60),
-                            RotationsPerSecondPerSecond.of(kSpindexer.MAX_ACCELERATION_RPM / 60))
-                    // Feedforward Constants
-                    .withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH)
-                    .withGearing(kSpindexer.GEAR_RATIO)
-                    .withMotorInverted(false)
-                    .withIdleMode(MotorMode.COAST)
-                    .withStatorCurrentLimit(Amps.of(kSpindexer.STATOR_CURRENT_LIMIT))
-                    .withSupplyCurrentLimit(Amps.of(kSpindexer.SUPPLY_CURRENT_LIMIT))
-                    .withMomentOfInertia(
-                            KilogramSquareMeters.of(kSpindexer.MOMENT_OF_INERTIA_KG_M2));
-        config = kSpindexer.disableSpindexerLogs ? config : config.withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH);
+                new SmartMotorControllerConfig(this)
+                        .withControlMode(ControlMode.CLOSED_LOOP)
+                        .withClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD)
+                        .withSimClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD)
+                        .withTrapezoidalProfile(
+                                RotationsPerSecond.of(kSpindexer.MAX_SPEED_RPM / 60),
+                                RotationsPerSecondPerSecond.of(
+                                        kSpindexer.MAX_ACCELERATION_RPM / 60))
+                        // Feedforward Constants
+                        .withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH)
+                        .withGearing(kSpindexer.GEAR_RATIO)
+                        .withMotorInverted(false)
+                        .withIdleMode(MotorMode.COAST)
+                        .withStatorCurrentLimit(Amps.of(kSpindexer.STATOR_CURRENT_LIMIT))
+                        .withSupplyCurrentLimit(Amps.of(kSpindexer.SUPPLY_CURRENT_LIMIT))
+                        .withMomentOfInertia(
+                                KilogramSquareMeters.of(kSpindexer.MOMENT_OF_INERTIA_KG_M2));
+        config =
+                kSpindexer.disableSpindexerLogs
+                        ? config
+                        : config.withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH);
+        System.out.println(config);
         return config;
     }
 
-    private FlyWheelConfig flyWheelConfigBuilder(){
-        FlyWheelConfig config =
-            new FlyWheelConfig();
-        config = kSpindexer.disableSpindexerLogs ? config : config.withTelemetry("SpindexerMech", TelemetryVerbosity.HIGH);
+    private FlyWheelConfig flyWheelConfigBuilder() {
+        FlyWheelConfig config = new FlyWheelConfig();
+        config =
+                kSpindexer.disableSpindexerLogs
+                        ? config
+                        : config.withTelemetry("SpindexerMech", TelemetryVerbosity.HIGH);
         return config;
     }
+
     public Command setSpeed(AngularVelocity speed) {
         return this.run(() -> flyWheel.setMechanismVelocitySetpoint(speed));
     }

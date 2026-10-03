@@ -1,6 +1,5 @@
 package igknighters.subsystems.indexer;
 
-import static edu.wpi.first.units.Units.Amp;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -35,35 +34,42 @@ public class ExitRoller extends SubsystemBase {
     private final FlyWheelConfig flyWheelConfig = flyWheelConfigBuilder();
     private FlyWheel flyWheel = new FlyWheel(flyWheelConfig, talonSmartMotorController);
 
-    private SmartMotorControllerConfig smcConfigBuilder(){
-     SmartMotorControllerConfig config =
-            new SmartMotorControllerConfig(this)
-                    .withControlMode(ControlMode.CLOSED_LOOP)
-                    .withClosedLoopController(kExitRollers.kP, kExitRollers.kI, kExitRollers.kD)
-                    .withSimClosedLoopController(kExitRollers.kP, kExitRollers.kI, kExitRollers.kD)
-                    .withTrapezoidalProfile(
-                            RotationsPerSecond.of(kExitRollers.MAX_SPEED_RPM / 60),
-                            RotationsPerSecondPerSecond.of(kExitRollers.MAX_ACCELERATION_RPM / 60))
-                    // Feedforward Constants
-                    .withGearing(kExitRollers.GEAR_RATIO)
-                    .withMotorInverted(true)
-                    .withIdleMode(MotorMode.COAST)
-                    .withStatorCurrentLimit(Amps.of(kExitRollers.STATOR_CURRENT_LIMIT))
-                    .withSupplyCurrentLimit(Amps.of(kExitRollers.SUPPLY_CURRENT_LIMIT))
-                    .withMomentOfInertia(
-                            KilogramSquareMeters.of(kExitRollers.MOMENT_OF_INERTIA_KG_M2));
-            
-        config = kExitRollers.disableExitRollersLogs ? config : config.withTelemetry("ExitRollerMotor", TelemetryVerbosity.HIGH);
-        return smcConfig;
+    private SmartMotorControllerConfig smcConfigBuilder() {
+        SmartMotorControllerConfig config =
+                new SmartMotorControllerConfig(this)
+                        .withControlMode(ControlMode.CLOSED_LOOP)
+                        .withClosedLoopController(kExitRollers.kP, kExitRollers.kI, kExitRollers.kD)
+                        .withSimClosedLoopController(
+                                kExitRollers.kP, kExitRollers.kI, kExitRollers.kD)
+                        .withTrapezoidalProfile(
+                                RotationsPerSecond.of(kExitRollers.MAX_SPEED_RPM / 60),
+                                RotationsPerSecondPerSecond.of(
+                                        kExitRollers.MAX_ACCELERATION_RPM / 60))
+                        // Feedforward Constants
+                        .withGearing(kExitRollers.GEAR_RATIO)
+                        .withMotorInverted(true)
+                        .withIdleMode(MotorMode.COAST)
+                        .withStatorCurrentLimit(Amps.of(kExitRollers.STATOR_CURRENT_LIMIT))
+                        .withSupplyCurrentLimit(Amps.of(kExitRollers.SUPPLY_CURRENT_LIMIT))
+                        .withMomentOfInertia(
+                                KilogramSquareMeters.of(kExitRollers.MOMENT_OF_INERTIA_KG_M2));
+
+        config =
+                kExitRollers.disableExitRollersLogs
+                        ? config
+                        : config.withTelemetry("ExitRollerMotor", TelemetryVerbosity.HIGH);
+        return config;
     }
 
-    private FlyWheelConfig flyWheelConfigBuilder(){
+    private FlyWheelConfig flyWheelConfigBuilder() {
         FlyWheelConfig config =
-            new FlyWheelConfig().withTelemetry("ExitRollerMech", TelemetryVerbosity.HIGH);
+                new FlyWheelConfig().withTelemetry("ExitRollerMech", TelemetryVerbosity.HIGH);
 
-        config = kExitRollers.disableExitRollersLogs ? config : config.withTelemetry("ExitRollerMech", TelemetryVerbosity.HIGH);
+        config =
+                kExitRollers.disableExitRollersLogs
+                        ? config
+                        : config.withTelemetry("ExitRollerMech", TelemetryVerbosity.HIGH);
         return config;
-        
     }
 
     public Command setSpeed(AngularVelocity speed) {
