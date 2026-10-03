@@ -58,7 +58,6 @@ public class Spindexer extends SubsystemBase {
                 kSpindexer.disableSpindexerLogs
                         ? config
                         : config.withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH);
-        System.out.println(config);
         return config;
     }
 
