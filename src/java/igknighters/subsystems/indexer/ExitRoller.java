@@ -56,18 +56,18 @@ public class ExitRoller extends SubsystemBase {
 
         config =
                 kExitRollers.disableExitRollersLogs
-                        ? config
+                        ? config.withTelemetry("ExitRollerMotor", TelemetryVerbosity.LOW)
                         : config.withTelemetry("ExitRollerMotor", TelemetryVerbosity.HIGH);
         return config;
     }
 
     private FlyWheelConfig flyWheelConfigBuilder() {
         FlyWheelConfig config =
-                new FlyWheelConfig().withTelemetry("ExitRollerMech", TelemetryVerbosity.HIGH);
+                new FlyWheelConfig();
 
         config =
                 kExitRollers.disableExitRollersLogs
-                        ? config
+                        ? config.withTelemetry("ExitRollerMech", TelemetryVerbosity.LOW)
                         : config.withTelemetry("ExitRollerMech", TelemetryVerbosity.HIGH);
         return config;
     }

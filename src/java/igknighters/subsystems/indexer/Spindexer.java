@@ -46,7 +46,6 @@ public class Spindexer extends SubsystemBase {
                                 RotationsPerSecondPerSecond.of(
                                         kSpindexer.MAX_ACCELERATION_RPM / 60))
                         // Feedforward Constants
-                        .withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH)
                         .withGearing(kSpindexer.GEAR_RATIO)
                         .withMotorInverted(false)
                         .withIdleMode(MotorMode.COAST)
@@ -56,7 +55,7 @@ public class Spindexer extends SubsystemBase {
                                 KilogramSquareMeters.of(kSpindexer.MOMENT_OF_INERTIA_KG_M2));
         config =
                 kSpindexer.disableSpindexerLogs
-                        ? config
+                        ? config.withTelemetry("spindexerMotor", TelemetryVerbosity.LOW)
                         : config.withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH);
         return config;
     }
@@ -65,7 +64,7 @@ public class Spindexer extends SubsystemBase {
         FlyWheelConfig config = new FlyWheelConfig();
         config =
                 kSpindexer.disableSpindexerLogs
-                        ? config
+                        ? config.withTelemetry("SpindexerMech", TelemetryVerbosity.LOW)
                         : config.withTelemetry("SpindexerMech", TelemetryVerbosity.HIGH);
         return config;
     }
