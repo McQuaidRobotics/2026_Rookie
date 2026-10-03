@@ -407,6 +407,10 @@ public class Robot extends LoggedRobot {
                 }
             }
         }
+        FieldVisualizer.getInstance()
+                .updateTurret(
+                        subsystems.shooter.turret.getCurrentAngle().in(Degree),
+                        subsystems.swerve.getState().Pose);
     }
 
     /** Binds commands to the driver controller. */
