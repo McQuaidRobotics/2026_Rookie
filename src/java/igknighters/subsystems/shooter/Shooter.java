@@ -1,7 +1,10 @@
 package igknighters.subsystems.shooter;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
+
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import static edu.wpi.first.units.Units.Degrees;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -45,7 +48,18 @@ public class Shooter extends SubsystemBase {
                                 + ", RPM: "
                                 + state.flywheelVelocity.in(RPM));
     }
+    // KYLE : ONCE THIS GOES INTO UR FLYWHEEL BRANCH YOU ARE GOING TO REPLACE THIS WITH A WORKING THING
+    public AngularVelocity getFlywheelVelocity() {
+        
+        return flyWheel.getSpeed(); 
+    }
 
+    public Angle getHoodAngle() {
+        return hood.getCurrentAngle();
+    }
+    public Angle getTurretAngle() {
+        return turret.getCurrentAngle();
+    }
     public boolean isHoodSensorHit() {
         return hood.getHoodLimit();
     }
