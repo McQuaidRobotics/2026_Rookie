@@ -2,20 +2,18 @@ package igknighters.commands.shooter;
 
 import static edu.wpi.first.units.Units.Degrees;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import igknighters.Robot;
-import igknighters.constants.FieldConstants;
 import igknighters.constants.ShootInformation;
 import igknighters.constants.SubsystemConstants.kShooter.kHood;
 import igknighters.subsystems.shooter.Shooter;
 import igknighters.subsystems.shooter.ShooterState;
 import igknighters.subsystems.shooter.Solver;
+import java.util.function.Supplier;
 
 public
 class ShooterCommands { // tech for a real mech like for an og one but with yams the commands are in
@@ -68,22 +66,33 @@ class ShooterCommands { // tech for a real mech like for an og one but with yams
                 .withName("HOOD IS DOWN ON SENSOR");
     }
 
-
-
     public static Command shoot(Shooter shooter, Supplier<Pose2d> robotPose) {
-        return Commands.run(() -> {
-            Pose2d targetPose = ShootInformation.getInstance().getTargetPose().toPose2d();
-            ShooterState targetState = Solver.solve(Robot.pose_pred.getPredictedPose(), targetPose);
-            ShooterState currentState = shooter.currentState(shooter);
-            shooter.targetState(targetState);
-            if (targetState==currentState){
-                //Run the spindexer
-            }
-            else {
-                //dont run the spindexer
-            }
-        }, shooter.flyWheel, shooter.hood, shooter.turret);
+        return Commands.run(
+                () -> {
+                    Pose2d targetPose = ShootInformation.getInstance().getTargetPose().toPose2d();
+                    ShooterState targetState =
+                            Solver.solve(Robot.pose_pred.getPredictedPose(), targetPose);
+                    ShooterState currentState = shooter.currentState(shooter);
+                    shooter.targetState(targetState);
+                    if (targetState == currentState) {
+                        // Run the spindexer
+                    } else {
+                        // dont run the spindexer
+                    }
+                },
+                shooter.flyWheel,
+                shooter.hood,
+                shooter.turret);
+    }
 
-
+    public static Command aim(Shooter shooter, Supplier<Pose2d> robotPose) {
+        return Commands.run(
+                () -> {
+                    Pose2d targetPose = ShootInformation.getInstance().getTargetPose().toPose2d();
+                    ShooterState targetState =
+                            Solver.solve(Robot.pose_pred.getPredictedPose(), targetPose);
+                    shooter.turret.targetAngle(targetState.turretAngle);
+                },
+                shooter.turret);
     }
 }

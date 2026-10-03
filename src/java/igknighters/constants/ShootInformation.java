@@ -2,12 +2,10 @@ package igknighters.constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import igknighters.Robot;
-import igknighters.util.log.Log;
 import java.util.function.Supplier;
 
 /**
@@ -34,8 +32,6 @@ public class ShootInformation {
         this.beingControlledTrigger = new Trigger(this::isBeingControlled);
         this.possibleShotTrigger = new Trigger(this::isPossibleShot);
     }
-
-    
 
     public static ShootInformation getInstance() {
         if (instance == null) {
@@ -89,8 +85,7 @@ public class ShootInformation {
 
     public Pose2d getData() {
         if (shouldPass()) {
-                return getPassTarget().toPose2d();
-            
+            return getPassTarget().toPose2d();
         }
         return getHubTarget().toPose2d();
     }
@@ -107,7 +102,6 @@ public class ShootInformation {
     public Pose3d getShotLocation() {
         if (shouldPass()) {
             return getPassTarget();
-            
         }
         return getHubTarget();
     }

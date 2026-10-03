@@ -51,6 +51,8 @@ public class FieldVisualizer {
     private final DoubleArrayPublisher shootingTargetPub =
             table.getDoubleArrayTopic("shootingTargetPose").publish();
 
+    public final Pose2d robotPose = new Pose2d();
+
     private final DoubleArrayPublisher turretAnglePub =
             table.getDoubleArrayTopic("turretAngle").publish();
 

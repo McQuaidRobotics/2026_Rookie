@@ -68,7 +68,7 @@ public class ShooterFlyWheel extends SubsystemBase {
         flyWheel.setMechanismVelocitySetpoint(speed);
     }
 
-    public AngularVelocity getSpeed(){
+    public AngularVelocity getSpeed() {
         return flyWheel.getSpeed();
     }
 

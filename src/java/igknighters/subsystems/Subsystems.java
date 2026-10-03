@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import igknighters.commands.shooter.ShooterCommands;
 import igknighters.constants.SubsystemConstants.kShooter.kHood;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
@@ -65,7 +66,8 @@ public class Subsystems {
         this.shooter.hood.setDefaultCommand(
                 shooter.hood.targetAngleCommand(Degrees.of(kHood.MIN_ANGLE_DEGREES)));
         this.shooter.turret.setDefaultCommand(
-                this.shooter.turret.targetAngleCommand(Degrees.of(0)));
+                ShooterCommands.aim(this.shooter, () -> swerve.getState().Pose));
+
         this.shooter.flyWheel.setDefaultCommand(
                 this.shooter
                         .flyWheel
