@@ -1,0 +1,98 @@
+package igknighters.subsystems.indexer;
+
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.KilogramSquareMeters;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
+
+import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import igknighters.constants.SubsystemConstants;
+import igknighters.constants.SubsystemConstants.kIndexer.kSpindexer;
+import yams.mechanisms.config.FlyWheelConfig;
+import yams.mechanisms.velocity.FlyWheel;
+import yams.motorcontrollers.SmartMotorController;
+import yams.motorcontrollers.SmartMotorControllerConfig;
+import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
+import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
+import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
+import yams.motorcontrollers.remote.TalonFXWrapper;
+
+public class Spindexer extends SubsystemBase {
+    private SmartMotorControllerConfig smcConfig = smcConfigBuilder();
+
+    private TalonFX talon =
+            new TalonFX(kSpindexer.LEADER_MOTOR_ID, SubsystemConstants.superStructure);
+
+    private SmartMotorController talonSmartMotorController =
+            new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
+
+    private final FlyWheelConfig flyWheelConfig = flyWheelConfigBuilder();
+
+    private FlyWheel flyWheel = new FlyWheel(flyWheelConfig, talonSmartMotorController);
+
+    private SmartMotorControllerConfig smcConfigBuilder() {
+        SmartMotorControllerConfig config =
+                new SmartMotorControllerConfig(this)
+                        .withControlMode(ControlMode.CLOSED_LOOP)
+                        .withClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD)
+                        .withSimClosedLoopController(kSpindexer.kP, kSpindexer.kI, kSpindexer.kD)
+                        .withTrapezoidalProfile(
+                                RotationsPerSecond.of(kSpindexer.MAX_SPEED_RPM / 60),
+                                RotationsPerSecondPerSecond.of(
+                                        kSpindexer.MAX_ACCELERATION_RPM / 60))
+                        // Feedforward Constants
+                        .withGearing(kSpindexer.GEAR_RATIO)
+                        .withMotorInverted(false)
+                        .withIdleMode(MotorMode.COAST)
+                        .withStatorCurrentLimit(Amps.of(kSpindexer.STATOR_CURRENT_LIMIT))
+                        .withSupplyCurrentLimit(Amps.of(kSpindexer.SUPPLY_CURRENT_LIMIT))
+                        .withMomentOfInertia(
+                                KilogramSquareMeters.of(kSpindexer.MOMENT_OF_INERTIA_KG_M2));
+        config =
+                kSpindexer.disableSpindexerLogs
+                        ? config.withTelemetry("spindexerMotor", TelemetryVerbosity.LOW)
+                        : config.withTelemetry("SpindexerMotor", TelemetryVerbosity.HIGH);
+        return config;
+    }
+
+    private FlyWheelConfig flyWheelConfigBuilder() {
+        FlyWheelConfig config = new FlyWheelConfig();
+        config =
+                kSpindexer.disableSpindexerLogs
+                        ? config.withTelemetry("SpindexerMech", TelemetryVerbosity.LOW)
+                        : config.withTelemetry("SpindexerMech", TelemetryVerbosity.HIGH);
+        return config;
+    }
+
+    public Command setSpeed(AngularVelocity speed) {
+        return this.run(() -> flyWheel.setMechanismVelocitySetpoint(speed));
+    }
+
+    public Command setVoltage(Voltage voltage) {
+
+        return flyWheel.setVoltage(voltage);
+    }
+
+    public void setSpeedNoCommand(AngularVelocity speed) {
+        flyWheel.setMechanismVelocitySetpoint(speed);
+    }
+
+    public void setVoltageNoCommand(Voltage voltage) {
+        flyWheel.setVoltageSetpoint(voltage);
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        flyWheel.simIterate();
+    }
+
+    @Override
+    public void periodic() {
+        flyWheel.updateTelemetry();
+    }
+}
