@@ -69,7 +69,7 @@ class ShooterCommands { // tech for a real mech like for an og one but with yams
                 .withName("HOOD IS DOWN ON SENSOR");
     }
 
-    public static Command shoot(Shooter shooter, Supplier<Pose2d> robotPose, Indexer indexer) {
+    public static Command shoot(Shooter shooter, Indexer indexer) {
         return Commands.run(
                 () -> {
                     Pose2d targetPose = ShootInformation.getInstance().getTargetPose().toPose2d();
@@ -125,7 +125,7 @@ class ShooterCommands { // tech for a real mech like for an og one but with yams
                 indexer.exitRoller);
     }
 
-    public static Command aim(Shooter shooter, Supplier<Pose2d> robotPose) {
+    public static Command aim(Shooter shooter) {
         return Commands.run(
                 () -> {
                     Pose2d targetPose = ShootInformation.getInstance().getTargetPose().toPose2d();

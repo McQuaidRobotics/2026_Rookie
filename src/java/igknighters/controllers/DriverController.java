@@ -144,7 +144,6 @@ public class DriverController {
         this.RT.whileTrue(
                 ShooterCommands.shoot(
                         subsystems.shooter,
-                        () -> Robot.pose_pred.getPredictedPose(),
                         subsystems.indexer));
         // Example: this.A.whileTrue(new MyCommand(subsystems.mySubsystem));
         // Swerve driving is handled by the default command set in Robot.java,

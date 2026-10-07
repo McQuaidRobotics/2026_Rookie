@@ -80,7 +80,7 @@ public class Subsystems {
         this.shooter.hood.setDefaultCommand(
                 shooter.hood.targetAngleCommand(Degrees.of(kHood.MIN_ANGLE_DEGREES)));
         this.shooter.turret.setDefaultCommand(
-                ShooterCommands.aim(this.shooter, () -> swerve.getState().Pose));
+                ShooterCommands.aim(this.shooter));
 
         this.indexer.spindexer.setDefaultCommand(this.indexer.spindexer.setVoltage(Volts.of(0)));
         this.indexer.exitRoller.setDefaultCommand(this.indexer.exitRoller.setVoltage(Volts.of(0)));
