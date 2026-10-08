@@ -1,6 +1,7 @@
 package igknighters.commands.shooter;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.Angle;
@@ -8,8 +9,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import igknighters.Robot;
+import igknighters.constants.ShootInformation;
 import igknighters.constants.SubsystemConstants.kShooter.kHood;
+import igknighters.subsystems.indexer.Indexer;
 import igknighters.subsystems.shooter.Shooter;
+import igknighters.subsystems.shooter.ShooterState;
+import igknighters.subsystems.shooter.Solver;
+import igknighters.util.log.Log;
+import java.util.function.Supplier;
 
 public
 class ShooterCommands { // tech for a real mech like for an og one but with yams the commands are in
@@ -60,5 +67,72 @@ class ShooterCommands { // tech for a real mech like for an og one but with yams
                                     shooter.hood.zeroAt(Degrees.of(kHood.MIN_ANGLE_DEGREES));
                                 }))
                 .withName("HOOD IS DOWN ON SENSOR");
+    }
+
+    public static Command shoot(Shooter shooter, Indexer indexer) {
+        return Commands.run(
+                () -> {
+                    Pose2d targetPose = ShootInformation.getInstance().getTargetPose().toPose2d();
+                    ShooterState targetState =
+                            Solver.solve(Robot.pose_pred.getPredictedPose(), targetPose);
+                    ShooterState currentState = shooter.currentState(shooter);
+                    shooter.targetState(targetState);
+                    Log.log(
+                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/TARGET TURRET ANGLE:",
+                            targetState.turretAngle.in(Degrees));
+                    Log.log(
+                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/TARGET HOOD ANGLE:",
+                            targetState.hoodAngle.in(Degrees));
+                    Log.log(
+                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/TARGET RPM:",
+                            targetState.flywheelVelocity.in(RPM));
+                    Log.log(
+                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/CURRENT TURRET ANGLE:",
+                            currentState.turretAngle.in(Degrees));
+                    Log.log(
+                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/CURRENT HOOD ANGLE:",
+                            currentState.hoodAngle.in(Degrees));
+                    Log.log(
+                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/CURRENT RPM:",
+                            currentState.flywheelVelocity.in(RPM));
+                    if (Math.abs(
+                                            targetState
+                                                    .flywheelVelocity
+                                                    .minus(currentState.flywheelVelocity)
+                                                    .in(RPM))
+                                    < 100
+                            && Math.abs(
+                                            targetState
+                                                    .hoodAngle
+                                                    .minus(currentState.hoodAngle)
+                                                    .in(Degrees))
+                                    < 5
+                            && Math.abs(
+                                            targetState
+                                                    .turretAngle
+                                                    .minus(currentState.turretAngle)
+                                                    .in(Degrees))
+                                    < 5) {
+                        indexer.setStateNoCommand(RPM.of(3000), RPM.of(3000));
+                    } else {
+                        indexer.setStateNoCommand(RPM.of(0), RPM.of(0));
+                    }
+                },
+                shooter.flyWheel,
+                shooter.hood,
+                shooter.turret,
+                indexer.spindexer,
+                indexer.exitRoller);
+    }
+
+    public static Command aim(Shooter shooter) {
+        return Commands.run(
+                () -> {
+                    Pose2d targetPose = ShootInformation.getInstance().getTargetPose().toPose2d();
+                    ShooterState targetState =
+                            Solver.solve(Robot.pose_pred.getPredictedPose(), targetPose);
+                    shooter.turret.targetAngle(targetState.turretAngle);
+                },
+                shooter.turret);
     }
 }

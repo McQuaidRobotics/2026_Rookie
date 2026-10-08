@@ -68,6 +68,10 @@ public class ShooterFlyWheel extends SubsystemBase {
         flyWheel.setMechanismVelocitySetpoint(speed);
     }
 
+    public AngularVelocity getSpeed() {
+        return flyWheel.getSpeed();
+    }
+
     @Override
     public void simulationPeriodic() {
         flyWheel.simIterate();

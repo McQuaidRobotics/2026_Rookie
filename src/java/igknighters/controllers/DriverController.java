@@ -1,6 +1,5 @@
 package igknighters.controllers;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -9,10 +8,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import igknighters.Robot;
 import igknighters.commands.IndexerCommands;
 import igknighters.commands.Wayfinder;
+import igknighters.commands.shooter.ShooterCommands;
 import igknighters.subsystems.Subsystems;
-import igknighters.subsystems.shooter.ShooterState;
 import java.util.function.DoubleSupplier;
 
 /**
@@ -141,13 +141,10 @@ public class DriverController {
      * @param subsystems The robot subsystems available for command targeting.
      */
     public void bind(final Subsystems subsystems) {
-        this.A.whileTrue(subsystems.shooter.flyWheel.setSpeed(RPM.of(1000)));
-        this.X.whileTrue(
-                IndexerCommands.SummonSpindexeroidTitano(
-                        subsystems.indexer, RPM.of(2000), RPM.of(2000)));
         this.RT.whileTrue(
-                subsystems.shooter.targetStateCommand(
-                        new ShooterState(Degrees.of(40), Degrees.of(-270), RPM.of(300))));
+                ShooterCommands.shoot(
+                        subsystems.shooter,
+                        subsystems.indexer));
         // Example: this.A.whileTrue(new MyCommand(subsystems.mySubsystem));
         // Swerve driving is handled by the default command set in Robot.java,
         // so no explicit bind is needed here for basic teleop driving.
