@@ -194,11 +194,11 @@ public class SubsystemConstants {
             public static final double WHEEL_RADIUS_METERS = 0.05; // 5 cm
             public static final double GEAR_RATIO = 1.0;
             public static final double MOMENT_OF_INERTIA_KG_M2 = 0.02;
-            public static final double MAX_SPEED_RPM = 5000.0;
-            public static final double MAX_ACCELERATION_RPM = 3000.0;
+            public static final double MAX_SPEED_RPM = 6000.0;
+            public static final double MAX_ACCELERATION_RPM = 10000.0;
             public static final double MOTION_MAGIC_JERK = 100.0;
             public static final int BEAM_BREAK_SENSOR_CHANNEL = 0;
-            public static final double kP = 0.3; // .5 max
+            public static final double kP = .3; // .5 max
             public static final double kI = 0.1;
             public static final double kD = 0.0;
             public static final double kS = 0.17;

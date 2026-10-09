@@ -16,7 +16,6 @@ import igknighters.subsystems.shooter.Shooter;
 import igknighters.subsystems.shooter.ShooterState;
 import igknighters.subsystems.shooter.Solver;
 import igknighters.util.log.Log;
-import java.util.function.Supplier;
 
 public
 class ShooterCommands { // tech for a real mech like for an og one but with yams the commands are in
@@ -76,25 +75,27 @@ class ShooterCommands { // tech for a real mech like for an og one but with yams
                     ShooterState targetState =
                             Solver.solve(Robot.pose_pred.getPredictedPose(), targetPose);
                     ShooterState currentState = shooter.currentState(shooter);
+                    if (targetState.flywheelVelocity.in(RPM) == 0) {
+                        indexer.setStateNoCommand(RPM.of(0), RPM.of(0));
+                        shooter.targetState(
+                                new ShooterState(
+                                        Degrees.of(kHood.MIN_ANGLE_DEGREES),
+                                        targetState.turretAngle,
+                                        RPM.of(4000)));
+                        return;
+                    }
                     shooter.targetState(targetState);
                     Log.log(
-                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/TARGET TURRET ANGLE:",
-                            targetState.turretAngle.in(Degrees));
+                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/ERROR TURRET ANGLE:",
+                            targetState.turretAngle.in(Degrees)
+                                    - currentState.turretAngle.in(Degrees));
                     Log.log(
-                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/TARGET HOOD ANGLE:",
-                            targetState.hoodAngle.in(Degrees));
+                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/ERROR HOOD ANGLE:",
+                            targetState.hoodAngle.in(Degrees) - currentState.hoodAngle.in(Degrees));
                     Log.log(
-                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/TARGET RPM:",
-                            targetState.flywheelVelocity.in(RPM));
-                    Log.log(
-                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/CURRENT TURRET ANGLE:",
-                            currentState.turretAngle.in(Degrees));
-                    Log.log(
-                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/CURRENT HOOD ANGLE:",
-                            currentState.hoodAngle.in(Degrees));
-                    Log.log(
-                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/CURRENT RPM:",
-                            currentState.flywheelVelocity.in(RPM));
+                            "ROBOT/SUBSYTEMS/SHOOTER/SHOOTER_COMMANDS/ERROR RPM:",
+                            targetState.flywheelVelocity.in(RPM)
+                                    - currentState.flywheelVelocity.in(RPM));
                     if (Math.abs(
                                             targetState
                                                     .flywheelVelocity

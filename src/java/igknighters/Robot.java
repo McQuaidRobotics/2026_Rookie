@@ -218,7 +218,7 @@ public class Robot extends LoggedRobot {
                                 System.getProperty("os.arch")));
         if (Robot.isReal()) {
             Logger.addDataReceiver(new WPILOGWriter());
-            // Logger.addDataReceiver(new NT4Publisher());
+            Logger.addDataReceiver(new NT4Publisher());
         } else {
             Logger.addDataReceiver(new NT4Publisher());
         }
