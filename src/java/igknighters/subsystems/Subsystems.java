@@ -6,7 +6,9 @@ import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.commands.shooter.ShooterCommands;
+import igknighters.constants.SubsystemConstants.kIntake.kPivot;
 import igknighters.constants.SubsystemConstants.kShooter.kHood;
+import igknighters.subsystems.Intake.Intake;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
 import igknighters.subsystems.indexer.Indexer;
@@ -35,6 +37,8 @@ public class Subsystems {
 
     public final Indexer indexer;
 
+    public final Intake intake;
+
     /**
      * Array of subsystems that require exclusive access (Locked resources). Used for publishing
      * command data and managing command requirements.
@@ -56,13 +60,15 @@ public class Subsystems {
             Led led,
             Luma luma,
             Shooter shooter,
-            Indexer indexer) {
+            Indexer indexer,
+            Intake intake) {
         this.swerve = swerve;
         this.shooter = shooter;
         this.vision = vision;
         this.led = led;
         this.luma = luma;
         this.indexer = indexer;
+        this.intake = intake;
         this.lockedResources =
                 new SubsystemBase[] {
                     swerve,
@@ -75,15 +81,20 @@ public class Subsystems {
                     shooter.flyWheel,
                     indexer,
                     indexer.spindexer,
-                    indexer.exitRoller
+                    indexer.exitRoller,
+                    intake,
+                    intake.pivot,
+                    intake.roller
                 };
         this.shooter.hood.setDefaultCommand(
                 shooter.hood.targetAngleCommand(Degrees.of(kHood.MIN_ANGLE_DEGREES)));
-        this.shooter.turret.setDefaultCommand(
-                ShooterCommands.aim(this.shooter));
+        this.shooter.turret.setDefaultCommand(ShooterCommands.aim(this.shooter));
 
         this.indexer.spindexer.setDefaultCommand(this.indexer.spindexer.setVoltage(Volts.of(0)));
         this.indexer.exitRoller.setDefaultCommand(this.indexer.exitRoller.setVoltage(Volts.of(0)));
+        this.intake.roller.setDefaultCommand(this.intake.roller.setSpeed(RPM.of(0)));
+        this.intake.pivot.setDefaultCommand(
+                this.intake.pivot.targetAngleCommand(Degrees.of(kPivot.MIN_ANGLE_DEGREES)));
         this.shooter.flyWheel.setDefaultCommand(
                 this.shooter
                         .flyWheel

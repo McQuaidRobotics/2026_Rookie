@@ -1,17 +1,15 @@
-package igknighters.subsystems.intake;
+package igknighters.subsystems.Intake;
+
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import igknighters.subsystems.shooter.Hood;
-import igknighters.subsystems.shooter.Shooter;
-import igknighters.subsystems.shooter.ShooterFlyWheel;
-import igknighters.subsystems.shooter.ShooterState;
-import igknighters.subsystems.shooter.turret.TurretNoAbstract;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class intake {
-    public intakePivot pivot = new intakePivot();
-    public intakeRoller roller = new intakeRoller();
-
+public class Intake extends SubsystemBase {
+    public static IntakePivot pivot = new IntakePivot();
+    public static IntakeRoller roller = new IntakeRoller();
 
     // put the flywheels and the turret here
     /**
@@ -19,9 +17,9 @@ public class intake {
      *
      * @param state
      */
-    public void targetState(ShooterState state) {
-        pivot.targetAngle(state.hoodAngle);
-        roller.setSpeedNoCommand(state.turretAngle);
+    public void targetState(IntakeState state) {
+        pivot.targetAngle(state.pivotAngle);
+        roller.setSpeedNoCommand(state.rollerSpeed);
     }
 
     /**
@@ -30,25 +28,17 @@ public class intake {
      * @param state
      * @return
      */
-    public Command targetStateCommand(ShooterState state) {
-        return Commands.parallel(
-                        hood.targetAngleCommand(state.hoodAngle),
-                        turret.targetAngleCommand(state.turretAngle),
-                        flyWheel.setSpeed(state.flywheelVelocity))
+    public static Command targetStateCommand(IntakeState state) {
+        return Commands.parallel(pivot.targetAngleCommand(state.pivotAngle))
+                // roller.setSpeed(state.rollerSpeed))
                 .withName(
-                        "TARGETING HOOD ANGLE: "
-                                + state.hoodAngle.in(Degrees)
-                                + ", TURRET ANGLE: "
-                                + state.turretAngle.in(Degrees)
-                                + ", RPM: "
-                                + state.flywheelVelocity.in(RPM));
+                        "TARGETING PIVOT ANGLE: "
+                                + state.pivotAngle.in(Degrees)
+                                + ", ROLLER SPEED: "
+                                + state.rollerSpeed.in(RPM));
     }
 
-    public ShooterState currentState(Shooter shooter) {
-        return new ShooterState(
-                shooter.hood.getCurrentAngle(),
-                shooter.turret.getCurrentAngle(),
-                shooter.flyWheel.getSpeed());
+    public static IntakeState currentState(Intake intake) {
+        return new IntakeState(intake.pivot.getCurrentAngle(), RPM.of(0.0));
     }
-    
 }

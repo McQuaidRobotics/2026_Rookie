@@ -1,20 +1,13 @@
-package igknighters.subsystems.intake;
+package igknighters.subsystems.Intake;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
@@ -22,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.constants.SubsystemConstants;
 import igknighters.constants.SubsystemConstants.kIntake;
+import igknighters.util.log.Log;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
 import yams.mechanisms.config.PivotConfig;
@@ -33,8 +27,8 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
-public class intakePivot extends SubsystemBase {
-        CANcoder turretEncoder =
+public class IntakePivot extends SubsystemBase {
+    CANcoder pivotIncoder =
             new CANcoder(
                     SubsystemConstants.kIntake.kPivot.CANCODER_ID,
                     SubsystemConstants.superStructure);
@@ -43,19 +37,23 @@ public class intakePivot extends SubsystemBase {
             new SmartMotorControllerConfig(this)
                     .withControlMode(ControlMode.CLOSED_LOOP)
                     // Feedback Constants (PID Constants)
-                    .withClosedLoopController(kIntake.kPivot.kP, kIntake.kPivot.kI, kIntake.kPivot.kD)
-                    .withSimClosedLoopController(kIntake.kPivot.kP, kIntake.kPivot.kI, kIntake.kPivot.kD)
-                    .withTrapezoidalProfile(
-                            MetersPerSecond.of(kIntake.kPivot.MAX_SPEED_METERS_PER_SECOND),
-                            MetersPerSecondPerSecond.of(kIntake.kPivot.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED / 60))
+                    .withClosedLoopController(
+                            kIntake.kPivot.kP, kIntake.kPivot.kI, kIntake.kPivot.kD)
+                    .withSimClosedLoopController(5, 0, 0)
+                    //     .withTrapezoidalProfile(
+                    //             MetersPerSecond.of(kIntake.kPivot.MAX_SPEED_METERS_PER_SECOND),
+                    //             MetersPerSecondPerSecond.of(
+                    //                     kIntake.kPivot.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED
+                    // / 60))
                     // ----------------------------------------------------------------
                     .withSoftLimits(
-                            Degrees.of(kIntake.kPivot.MIN_ANGLE_DEGREES),
-                            Degrees.of(kIntake.kPivot.MAX_ANGLE_DEGREES))
+                            Degrees.of(kIntake.kPivot.MIN_ANGLE_DEGREES - 3),
+                            Degrees.of(
+                                    kIntake.kPivot.MAX_ANGLE_DEGREES
+                                            + 3)) // soft limits are applied to the
+                    // SmartMotorControllers PID
                     // ----------------------------------------------------------------
-                    .withSimClosedLoopController(5, 0, 0)
                     // Feedforward Constants
-                    .withFeedforward(new ArmFeedforward(kIntake.kPivot.kS, 0, kIntake.kPivot.kV))
                     .withSimFeedforward(
                             new ArmFeedforward(
                                     kIntake.kPivot.kS,
@@ -64,27 +62,22 @@ public class intakePivot extends SubsystemBase {
                     // horizontal and does not have to fight gravity
                     // Telemetry name and verbosity level
                     .withTelemetry("PivotMotor", TelemetryVerbosity.HIGH)
-                    .withGearing(kIntake.kPivot.GEAR_RATIO)
+                    .withGearing(1) // gearing is 1:1 because the gearing is already applied in the
                     // Motor properties to prevent over currenting.
-                    .withMotorInverted(false)
+                    .withMotorInverted(true)
                     .withIdleMode(MotorMode.BRAKE)
                     .withStatorCurrentLimit(Amps.of(kIntake.kPivot.STATOR_CURRENT_LIMIT))
-                    .withClosedLoopRampRate(Seconds.of(0.25))
-                    .withOpenLoopRampRate(Seconds.of(0.25))
-                    .withSoftLimits(
-                            Degrees.of(kIntake.kPivot.MIN_ANGLE_DEGREES),
-                            Degrees.of(kIntake.kPivot.MAX_ANGLE_DEGREES))
+                    //     .withClosedLoopRampRate(Seconds.of(0.25))
                     .withMomentOfInertia(Meters.of(kIntake.kPivot.LENGTH_METERS), Pounds.of(.15))
-                    .withClosedLoopRampRate(Seconds.of(0.25))
-                    .withOpenLoopRampRate(
-                            Seconds.of(0.25)) //  numbers that we have seen work in the season
-                    .withExternalEncoder(turretEncoder)
-                    .withExternalEncoderInverted(false)
+                    //     .withOpenLoopRampRate(
+                    //             Seconds.of(0.25)) //  numbers that we have seen work in the
+                    // season
+                    .withExternalEncoder(pivotIncoder)
+                    .withExternalEncoderInverted(true)
                     .withExternalEncoderGearing(
                             new MechanismGearing(GearBox.fromReductionStages(1)))
                     .withExternalEncoderZeroOffset(
-                            Rotations.of(
-                                    kIntake.kPivot.ENCODER_OFFSET)) // this is what allows you
+                            Rotations.of(kIntake.kPivot.ENCODER_OFFSET)) // this is what allows you
                     // to zero the encoder
                     .withUseExternalFeedbackEncoder(true)
                     .withStartingPosition(Degrees.of(kIntake.kPivot.MIN_ANGLE_DEGREES));
@@ -92,7 +85,7 @@ public class intakePivot extends SubsystemBase {
     private TalonFX talon = new TalonFX(kIntake.kPivot.MOTOR_ID, SubsystemConstants.superStructure);
 
     private SmartMotorController talonSmartMotorController =
-            new TalonFXWrapper(talon, DCMotor.getFalcon500(1), smcConfig);
+            new TalonFXWrapper(talon, DCMotor.getKrakenX60(1), smcConfig);
 
     private final PivotConfig pivotConfig =
             new PivotConfig()
@@ -101,7 +94,6 @@ public class intakePivot extends SubsystemBase {
                     .withHardLimits(Degrees.of(-280), Degrees.of(100))
                     .withTelemetry("PIVOT", TelemetryVerbosity.HIGH);
     private Pivot pivot = new Pivot(pivotConfig, talonSmartMotorController);
-
 
     public void targetAngle(Angle angle) {
         // shooter.setMeasurementPositionSetpoint(); OG
@@ -113,17 +105,19 @@ public class intakePivot extends SubsystemBase {
     }
 
     public Command targetAngleCommand(Angle angle) {
+        Log.log("ROBOT/SUBSYSTEMS/INTAKE/PIVOT/TARGETING_POSITION", angle.in(Degrees));
         return pivot.run(angle);
     }
 
     public Command targetAngleAndEndWhenReached(Angle angle) {
+        Log.log("ROBOT/SUBSYSTEMS/INTAKE/PIVOT/TARGETING_POSITION", angle.in(Degrees));
         return pivot.runTo(angle, Rotations.of(.05));
     }
 
     @Override
     public void periodic() {
         pivot.updateTelemetry();
-        
+        Log.log("ROBOT/SUBSYSTEMS/INTAKE/PIVOT/CANCODER_POSITION", pivot.getAngle().in(Degrees));
     }
 
     @Override
@@ -131,5 +125,3 @@ public class intakePivot extends SubsystemBase {
         pivot.simIterate();
     }
 }
-    
-

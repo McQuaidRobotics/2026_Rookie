@@ -28,6 +28,7 @@ import igknighters.constants.DrivingSharedState;
 import igknighters.constants.FieldConstants;
 import igknighters.constants.SubsystemConstants;
 import igknighters.controllers.DriverController;
+import igknighters.subsystems.Intake.Intake;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
 import igknighters.subsystems.Subsystems;
@@ -218,7 +219,7 @@ public class Robot extends LoggedRobot {
                                 System.getProperty("os.arch")));
         if (Robot.isReal()) {
             Logger.addDataReceiver(new WPILOGWriter());
-            // Logger.addDataReceiver(new NT4Publisher());
+            Logger.addDataReceiver(new NT4Publisher());
         } else {
             Logger.addDataReceiver(new NT4Publisher());
         }
@@ -241,7 +242,8 @@ public class Robot extends LoggedRobot {
                         new Led(90, 2),
                         new Luma(true, "object-detection"),
                         new Shooter(),
-                        new Indexer());
+                        new Indexer(),
+                        new Intake());
 
         setUpSwerve(subsystems);
         publishCommandsAndSubystems(subsystems);
@@ -273,7 +275,8 @@ public class Robot extends LoggedRobot {
                         new Led(90, 2),
                         new Luma(true, "object-detection"),
                         new Shooter(),
-                        new Indexer());
+                        new Indexer(),
+                        new Intake());
 
         setUpSwerve(subsystems);
         pose_pred = new RobotPosePredictor(subsystems.swerve);

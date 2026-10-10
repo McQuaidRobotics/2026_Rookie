@@ -1,4 +1,4 @@
-package igknighters.subsystems.intake;
+package igknighters.subsystems.Intake;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Meters;
@@ -7,12 +7,10 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import igknighters.constants.SubsystemConstants;
 import igknighters.constants.SubsystemConstants.kIntake.kRollers;
@@ -25,7 +23,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
-public class intakeRoller extends SubsystemBase {
+public class IntakeRoller extends SubsystemBase {
     private SmartMotorControllerConfig smcConfig =
             new SmartMotorControllerConfig(this)
                     .withControlMode(ControlMode.CLOSED_LOOP)

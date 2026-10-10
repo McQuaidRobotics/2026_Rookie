@@ -1,6 +1,14 @@
-package igknighters.subsystems.intake;
+package igknighters.subsystems.Intake;
 
-public class intakeState {
-    
-    
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+
+public class IntakeState {
+    public Angle pivotAngle;
+    public AngularVelocity rollerSpeed;
+
+    public IntakeState(Angle pivotAngle, AngularVelocity rollerSpeed) {
+        this.pivotAngle = pivotAngle;
+        this.rollerSpeed = rollerSpeed;
+    }
 }
