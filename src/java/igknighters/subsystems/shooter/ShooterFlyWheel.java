@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,6 +36,10 @@ public class ShooterFlyWheel extends SubsystemBase {
                             RotationsPerSecond.of(kFlywheels.MAX_SPEED_RPM / 60),
                             RotationsPerSecondPerSecond.of(kFlywheels.MAX_ACCELERATION_RPM / 60))
                     // Feedforward Constants
+                    .withFeedforward(
+                            new SimpleMotorFeedforward(
+                                    SubsystemConstants.kShooter.kFlywheels.kS,
+                                    SubsystemConstants.kShooter.kFlywheels.kV))
                     .withTelemetry("SHOOTER_FLYWHEEL_LEADER_MOTOR", TelemetryVerbosity.HIGH)
                     .withGearing(1)
                     .withMotorInverted(true)
