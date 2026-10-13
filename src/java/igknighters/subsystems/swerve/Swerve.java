@@ -1,6 +1,7 @@
 package igknighters.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RPM;
 
 import choreo.Choreo.TrajectoryLogger;
 import choreo.auto.AutoFactory;
@@ -11,6 +12,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -23,6 +25,8 @@ import igknighters.constants.Conv;
 import igknighters.subsystems.swerve.swerveconstants.GeminiConsts;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import limelight.networktables.AngularVelocity3d;
+import limelight.networktables.Orientation3d;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -46,6 +50,28 @@ public class Swerve extends SubsystemBase {
     /** Constructs a Swerve subsystem with the drive enabled. */
     public Swerve() {
         this(false);
+    }
+
+    public Orientation3d getRobotOrientation() {
+        // need to test irl to see how the rotation is effected by mounting
+        if (!isSwerveDisabled) {
+            return new Orientation3d(drivetrain.getPigeon2().getRotation3d(), getAngularVelocity());
+        } else {
+            return new Orientation3d(new Rotation3d(), getAngularVelocity());
+        }
+    }
+
+    public AngularVelocity3d getAngularVelocity() {
+        if (!isSwerveDisabled) {
+            // NOTE: IT IS UNKOWN AS TO WHETHER LL WANTS THE WORLD PERSPECTIVE OR ROBOT
+            // ALSO I DO NOT KNOW IF I HAVE TO HANDLE THE WEIRD MOUNTING MANUALLY
+            return new AngularVelocity3d(
+                    drivetrain.getPigeon2().getAngularVelocityXDevice().getValue(),
+                    drivetrain.getPigeon2().getAngularVelocityYDevice().getValue(),
+                    drivetrain.getPigeon2().getAngularVelocityZDevice().getValue());
+        } else {
+            return new AngularVelocity3d(RPM.of(0), RPM.of(0), RPM.of(0));
+        }
     }
 
     /**
