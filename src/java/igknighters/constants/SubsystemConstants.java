@@ -1,6 +1,8 @@
 package igknighters.constants;
 
 import com.ctre.phoenix6.CANBus;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 
 public class SubsystemConstants {
 
@@ -282,10 +284,52 @@ public class SubsystemConstants {
     }
 
     public static class kLimelightVision {
-        public static final String turretCam = "limelight";
-        public static final String intakeCam = "limelight-intake";
-        public static final String backCam = "limelight-back";
-        public static final String rightCam = "limelight-left";
+        // NOTE LIMELIGHTS ARE WEIERD THE FORWARD AXIS IS X, THE LEFT RIGHT AXIS IS Y with right =
+        // +, roll pitch and yaw  all based on counterclockwise rotation so ignore rotation 3d docs
+
+        public static String primaryCam = "limelight";
+
+        public static Pose3d primaryCamPose =
+                new Pose3d(
+                        -0.2991612,
+                        .3088,
+                        0.2026,
+                        new Rotation3d(
+                                Math.toRadians(180.0),
+                                Math.toRadians(15.0),
+                                Math.toRadians(-64.841)));
+
+        public static String frontCam = "limelight-intake";
+
+        public static Pose3d frontCamPose =
+                new Pose3d(
+                        0.0359,
+                        0.3088,
+                        0.2026,
+                        new Rotation3d(
+                                Math.toRadians(180),
+                                Math.toRadians(15.0),
+                                Math.toRadians(-64.841)));
+
+        public static String backCam = "limelight-back";
+
+        public static Pose3d backCamPose =
+                new Pose3d(
+                        -0.31455,
+                        -0.2989,
+                        0.19624,
+                        new Rotation3d(
+                                Math.toRadians(180), Math.toRadians(15.0), Math.toRadians(180.0)));
+
+        public static String leftCam = "limelight-left";
+
+        public static Pose3d leftCamPose =
+                new Pose3d(
+                        -0.21767,
+                        -0.31455,
+                        0.19625,
+                        new Rotation3d(
+                                Math.toRadians(180), Math.toRadians(15.0), Math.toRadians(90.0)));
         public static boolean disableVisionLogs = true;
 
         static {
