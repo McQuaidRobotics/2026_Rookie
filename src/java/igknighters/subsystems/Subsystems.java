@@ -5,7 +5,9 @@ import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import igknighters.commands.IndexerCommands;
 import igknighters.commands.shooter.ShooterCommands;
+import igknighters.constants.SubsystemConstants;
 import igknighters.constants.SubsystemConstants.kShooter.kHood;
 import igknighters.subsystems.LimeLightVision.LimeLightVision;
 import igknighters.subsystems.Luma.Luma;
@@ -79,10 +81,12 @@ public class Subsystems {
                 };
         this.shooter.hood.setDefaultCommand(
                 shooter.hood.targetAngleCommand(Degrees.of(kHood.MIN_ANGLE_DEGREES)));
-        this.shooter.turret.setDefaultCommand(
-                ShooterCommands.aim(this.shooter));
+        this.shooter.turret.setDefaultCommand(ShooterCommands.aim(this.shooter));
 
-        this.indexer.spindexer.setDefaultCommand(this.indexer.spindexer.setVoltage(Volts.of(0)));
+        this.indexer.spindexer.setDefaultCommand(
+                IndexerCommands.JekSpindexer(
+                        this.indexer.spindexer,
+                        RPM.of(SubsystemConstants.kIndexer.kSpindexer.jerkSpeed)));
         this.indexer.exitRoller.setDefaultCommand(this.indexer.exitRoller.setVoltage(Volts.of(0)));
         this.shooter.flyWheel.setDefaultCommand(
                 this.shooter
