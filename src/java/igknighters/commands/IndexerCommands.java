@@ -18,15 +18,13 @@ public class IndexerCommands {
         return Commands.repeatingSequence(
                 Commands.runOnce(
                         () -> {
-                            System.out.println("Forward");
                             spindexer.setSpeedNoCommand(speed);
                         },
                         spindexer),
                 Commands.waitSeconds(1),
                 Commands.runOnce(
                         () -> {
-                            System.out.println("reverse");
-                            spindexer.setSpeedNoCommand(speed.times(-1));
+                           spindexer.setSpeedNoCommand(speed.times(-1));
                         },
                         spindexer),
                 Commands.waitSeconds(1));
