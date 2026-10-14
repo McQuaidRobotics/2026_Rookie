@@ -83,7 +83,7 @@ public class SubsystemConstants {
             public static final double kS = 0.178;
             public static final double kV = 0.5;
             public static final double kA = 0;
-            public static final double jerkSpeed = 1000;
+            public static final double jerkSpeed = 100;
             public static boolean disableSpindexerLogs = true;
 
             static {
