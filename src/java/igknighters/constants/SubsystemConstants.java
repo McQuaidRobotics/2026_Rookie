@@ -67,9 +67,9 @@ public class SubsystemConstants {
             public static final int LEADER_MOTOR_ID = 16;
             public static final double WHEEL_RADIUS_METERS = 0.0508; // 2 inch radius
             public static final double GEAR_RATIO = 4.0;
-            public static final double MOMENT_OF_INERTIA_KG_M2 = 0.02;
+            public static final double MOMENT_OF_INERTIA_KG_M2 = 0.01;
             public static final double MAX_SPEED_RPM = 5000.0;
-            public static final double MAX_ACCELERATION_RPM = 1500.0;
+            public static final double MAX_ACCELERATION_RPM = 5000.0;
             public static final double MOTION_MAGIC_JERK = 600.0;
             public static final int BEAM_BREAK_SENSOR_CHANNEL = 0;
             public static final int FORWARD_CURRENT_LIMIT = 40;
@@ -95,9 +95,9 @@ public class SubsystemConstants {
         public static class kExitRollers {
             public static final int LEADER_MOTOR_ID = 17;
             public static final double GEAR_RATIO = 5.0;
-            public static final double MOMENT_OF_INERTIA_KG_M2 = 0.02;
+            public static final double MOMENT_OF_INERTIA_KG_M2 = 0.005;
             public static final double MAX_SPEED_RPM = 5000.0;
-            public static final double MAX_ACCELERATION_RPM = 1500.0;
+            public static final double MAX_ACCELERATION_RPM = 5000.0;
             public static final double MOTION_MAGIC_JERK = 5000.0;
             public static final int BEAM_BREAK_SENSOR_CHANNEL = 0;
             public static final int STATOR_CURRENT_LIMIT =
