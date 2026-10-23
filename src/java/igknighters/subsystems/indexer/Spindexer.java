@@ -29,7 +29,7 @@ public class Spindexer extends SubsystemBase {
             new TalonFX(kSpindexer.LEADER_MOTOR_ID, SubsystemConstants.superStructure);
 
     private SmartMotorController talonSmartMotorController =
-            new TalonFXWrapper(talon, DCMotor.getKrakenX44(1), smcConfig);
+            new TalonFXWrapper(talon, DCMotor.getKrakenX60(1), smcConfig);
 
     private final FlyWheelConfig flyWheelConfig = flyWheelConfigBuilder();
 
